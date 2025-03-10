@@ -3,21 +3,33 @@ packages:
   - docs
   - packages/*
   - examples/*
+
+catalog:
+  changelogen: ^0.0.0
 catalogs:
   prod:
     '@modelcontextprotocol/sdk': ^1.6.1
     h3: ^1.15.1
     zod: ^3.24.2
+  nuxt:
+    '@nuxt/kit': ^3.16.0
+    '@nuxt/devtools': ^2.2.1
+    '@nuxt/eslint-config': ^1.2.0
+    '@nuxt/module-builder': ^0.8.4
+    '@nuxt/schema': ^3.16.0
+    '@nuxt/test-utils': ^3.17.2
+    nuxt: ^3.16.0
   cli:
     '@antfu/eslint-config': ^4.8.1
     '@antfu/ni': ^23.3.1
     bumpp: ^10.0.3
-    eslint: ^9.21.0
+    eslint: ^9.22.0
     lint-staged: ^15.4.3
+    vue-tsc: ^2.2.8
     nodemon: ^3.1.9
     simple-git-hooks: ^2.11.1
     tsx: ^4.19.3
-    typescript: ^5.8.2
+    typescript: ~5.8.2
     unbuild: ^3.5.0
     vite: ^6.2.1
   testing:
@@ -26,7 +38,7 @@ catalogs:
     vitest-package-exports: ^0.1.1
     vitest: ^3.0.8
   types:
-    '@types/node': ^22.13.10
+    '@types/node': latest
   utils:
     '@antfu/utils': ^9.1.0
     tinyexec: ^0.3.2

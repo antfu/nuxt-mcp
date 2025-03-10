@@ -1,0 +1,47 @@
+{
+  "name": "nuxt-mcp",
+  "type": "module",
+  "version": "0.0.0",
+  "description": "MCP server helping models to understand your Nuxt app better.",
+  "license": "MIT",
+  "homepage": "https://github.com/antfu/nuxt-mcp#readme",
+  "repository": "antfu/nuxt-mcp",
+  "bugs": "https://github.com/antfu/nuxt-mcp/issues",
+  "keywords": [
+    "nuxt",
+    "mcp",
+    "modelcontextprotocol"
+  ],
+  "sideEffects": false,
+  "exports": {
+    ".": "./dist/module.mjs"
+  },
+  "main": "./dist/module.mjs",
+  "module": "./dist/module.mjs",
+  "types": "./dist/types.d.mts",
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "prepack": "nuxt-module-build build",
+    "dev": "nuxi dev playground",
+    "dev:build": "nuxi build playground",
+    "dev:prepare": "nuxt-module-build build --stub && nuxt-module-build prepare && nuxi prepare playground"
+  },
+  "dependencies": {
+    "@nuxt/kit": "catalog:nuxt"
+  },
+  "devDependencies": {
+    "@nuxt/devtools": "catalog:nuxt",
+    "@nuxt/eslint-config": "catalog:nuxt",
+    "@nuxt/module-builder": "catalog:nuxt",
+    "@nuxt/schema": "catalog:nuxt",
+    "@nuxt/test-utils": "catalog:nuxt",
+    "@types/node": "catalog:types",
+    "eslint": "catalog:cli",
+    "nuxt": "catalog:nuxt",
+    "typescript": "catalog:cli",
+    "vitest": "catalog:testing",
+    "vue-tsc": "catalog:cli"
+  }
+}
