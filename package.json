@@ -10,6 +10,7 @@
     "lint": "eslint",
     "release": "bumpp -r && pnpm -r publish",
     "test": "vitest",
+    "inspect": "npx @modelcontextprotocol/inspector",
     "typecheck": "tsc --noEmit",
     "prepare": "simple-git-hooks && nr -r dev:prepare"
   },
@@ -17,6 +18,7 @@
     "@antfu/eslint-config": "catalog:cli",
     "@antfu/ni": "catalog:cli",
     "@antfu/utils": "catalog:utils",
+    "@modelcontextprotocol/inspector": "catalog:",
     "@modelcontextprotocol/sdk": "catalog:prod",
     "@types/js-yaml": "catalog:testing",
     "@types/node": "catalog:types",

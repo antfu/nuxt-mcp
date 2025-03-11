@@ -25,15 +25,19 @@
   "scripts": {
     "build": "nuxt-module-build build",
     "prepublishOnly": "nr build",
-    "play": "DEBUG=nuxt:mcp:server nuxi dev playground",
+    "play": "DEBUG=nuxt:mcp:server,vite:mcp:server PORT=4000 nuxi dev playground",
     "play:build": "nuxi build playground",
     "dev:prepare": "nuxt-module-build build --stub && nuxt-module-build prepare && nuxi prepare playground"
+  },
+  "peerDependencies": {
+    "nuxt": ">=3.5.0"
   },
   "dependencies": {
     "@modelcontextprotocol/sdk": "catalog:prod",
     "@nuxt/kit": "catalog:nuxt",
     "debug": "catalog:",
     "pathe": "catalog:",
+    "unimport": "catalog:",
     "vite-plugin-mcp": "workspace:*",
     "zod": "catalog:prod"
   },

@@ -5,4 +5,7 @@ export default defineConfig({
   plugins: [
     ViteMcp(),
   ],
+  server: {
+    port: 5200,
+  },
 })

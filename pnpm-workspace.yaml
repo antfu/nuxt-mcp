@@ -5,11 +5,13 @@ packages:
   - examples/*
 
 catalog:
+  '@modelcontextprotocol/inspector': ^0.5.1
   '@types/debug': ^4.1.12
   changelogen: ^0.0.0
   debug: ^4.4.0
   find-up: ^7.0.0
   pathe: ^2.0.3
+  unimport: ^4.1.2
 catalogs:
   prod:
     '@modelcontextprotocol/sdk': ^1.6.1

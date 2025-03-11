@@ -36,6 +36,9 @@
     "prepublishOnly": "nr build",
     "start": "nodemon --exec 'tsx src/server.ts'"
   },
+  "peerDependencies": {
+    "vite": ">=6.0.0"
+  },
   "dependencies": {
     "@modelcontextprotocol/sdk": "catalog:prod",
     "debug": "catalog:",
