@@ -23,13 +23,19 @@
     "dist"
   ],
   "scripts": {
-    "prepack": "nuxt-module-build build",
-    "dev": "nuxi dev playground",
-    "dev:build": "nuxi build playground",
+    "build": "nuxt-module-build build",
+    "prepublishOnly": "nr build",
+    "play": "DEBUG=nuxt:mcp:server nuxi dev playground",
+    "play:build": "nuxi build playground",
     "dev:prepare": "nuxt-module-build build --stub && nuxt-module-build prepare && nuxi prepare playground"
   },
   "dependencies": {
-    "@nuxt/kit": "catalog:nuxt"
+    "@modelcontextprotocol/sdk": "catalog:prod",
+    "@nuxt/kit": "catalog:nuxt",
+    "debug": "catalog:",
+    "pathe": "catalog:",
+    "vite-plugin-mcp": "workspace:*",
+    "zod": "catalog:prod"
   },
   "devDependencies": {
     "@nuxt/devtools": "catalog:nuxt",
@@ -37,6 +43,7 @@
     "@nuxt/module-builder": "catalog:nuxt",
     "@nuxt/schema": "catalog:nuxt",
     "@nuxt/test-utils": "catalog:nuxt",
+    "@types/debug": "catalog:",
     "@types/node": "catalog:types",
     "eslint": "catalog:cli",
     "nuxt": "catalog:nuxt",

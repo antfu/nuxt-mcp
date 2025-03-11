@@ -32,12 +32,17 @@
   "scripts": {
     "build": "unbuild",
     "dev": "unbuild --stub",
+    "play": "nr -C playground dev",
     "prepublishOnly": "nr build",
     "start": "nodemon --exec 'tsx src/server.ts'"
   },
   "dependencies": {
     "@modelcontextprotocol/sdk": "catalog:prod",
-    "h3": "catalog:prod",
+    "debug": "catalog:",
+    "pathe": "catalog:",
     "zod": "catalog:prod"
+  },
+  "devDependencies": {
+    "@types/debug": "catalog:"
   }
 }

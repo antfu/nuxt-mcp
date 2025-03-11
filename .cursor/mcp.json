@@ -1,7 +1,10 @@
 {
   "mcpServers": {
-    "local-server": {
-      "url": "http://localhost:3001/sse"
+    "vite": {
+      "url": "http://localhost:5173/__mcp/sse"
+    },
+    "nuxt": {
+      "url": "http://localhost:3000/__mcp/sse"
     }
   }
 }

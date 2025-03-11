@@ -5,11 +5,16 @@ packages:
   - examples/*
 
 catalog:
+  '@types/debug': ^4.1.12
   changelogen: ^0.0.0
+  debug: ^4.4.0
+  find-up: ^7.0.0
+  pathe: ^2.0.3
 catalogs:
   prod:
     '@modelcontextprotocol/sdk': ^1.6.1
     h3: ^1.15.1
+    vite-plugin-mcp: workspac
     zod: ^3.24.2
   nuxt:
     '@nuxt/kit': ^3.16.0
@@ -29,9 +34,9 @@ catalogs:
     nodemon: ^3.1.9
     simple-git-hooks: ^2.11.1
     tsx: ^4.19.3
-    typescript: ~5.8.2
+    typescript: ~5.7.2
     unbuild: ^3.5.0
-    vite: ^6.2.1
+    vite: ^6.2.0
   testing:
     '@types/js-yaml': ^4.0.9
     js-yaml: ^4.1.0
