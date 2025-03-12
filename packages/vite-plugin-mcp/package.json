@@ -42,11 +42,11 @@
   },
   "dependencies": {
     "@modelcontextprotocol/sdk": "catalog:prod",
-    "debug": "catalog:",
-    "pathe": "catalog:",
+    "debug": "catalog:prod",
+    "pathe": "catalog:prod",
     "zod": "catalog:prod"
   },
   "devDependencies": {
-    "@types/debug": "catalog:"
+    "@types/debug": "catalog:types"
   }
 }

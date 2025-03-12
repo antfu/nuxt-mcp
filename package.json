@@ -18,14 +18,12 @@
     "@antfu/eslint-config": "catalog:cli",
     "@antfu/ni": "catalog:cli",
     "@antfu/utils": "catalog:utils",
-    "@modelcontextprotocol/inspector": "catalog:",
+    "@modelcontextprotocol/inspector": "catalog:cli",
     "@modelcontextprotocol/sdk": "catalog:prod",
-    "@types/js-yaml": "catalog:testing",
     "@types/node": "catalog:types",
     "bumpp": "catalog:cli",
     "eslint": "catalog:cli",
     "h3": "catalog:prod",
-    "js-yaml": "catalog:testing",
     "lint-staged": "catalog:cli",
     "nodemon": "catalog:cli",
     "simple-git-hooks": "catalog:cli",
@@ -36,6 +34,7 @@
     "vite": "catalog:cli",
     "vitest": "catalog:testing",
     "vitest-package-exports": "catalog:testing",
+    "yaml": "catalog:testing",
     "zod": "catalog:prod"
   },
   "simple-git-hooks": {
