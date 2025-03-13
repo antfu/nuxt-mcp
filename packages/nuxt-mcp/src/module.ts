@@ -102,6 +102,6 @@ export default defineNuxtModule<ModuleOptions>({
           },
         )
       },
-    }))
+    }), { client: true })
   },
 })

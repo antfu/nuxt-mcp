@@ -42,6 +42,7 @@
   },
   "dependencies": {
     "@modelcontextprotocol/sdk": "catalog:prod",
+    "ansis": "catalog:prod",
     "debug": "catalog:prod",
     "pathe": "catalog:prod",
     "zod": "catalog:prod"

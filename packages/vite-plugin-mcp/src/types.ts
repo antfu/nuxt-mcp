@@ -15,6 +15,13 @@ export interface ViteMcpOptions {
   port?: number
 
   /**
+   * Print the MCP server URL in the console
+   *
+   * @default true
+   */
+  printUrl?: boolean
+
+  /**
    * The MCP server info. Ingored when `mcpServer` is provided
    */
   mcpServerInfo?: McpServerInfo

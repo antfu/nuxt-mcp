@@ -29,6 +29,7 @@ catalogs:
     nuxt: ^3.16.0
   prod:
     '@modelcontextprotocol/sdk': ^1.7.0
+    ansis: ^3.17.0
     debug: ^4.4.0
     h3: ^1.15.1
     pathe: ^2.0.3

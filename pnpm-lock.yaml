@@ -71,6 +71,9 @@ catalogs:
     '@modelcontextprotocol/sdk':
       specifier: ^1.7.0
       version: 1.7.0
+    ansis:
+      specifier: ^3.17.0
+      version: 3.17.0
     debug:
       specifier: ^4.4.0
       version: 4.4.0
@@ -245,6 +248,9 @@ importers:
       '@modelcontextprotocol/sdk':
         specifier: catalog:prod
         version: 1.7.0
+      ansis:
+        specifier: catalog:prod
+        version: 3.17.0
       debug:
         specifier: catalog:prod
         version: 4.4.0(supports-color@5.5.0)
