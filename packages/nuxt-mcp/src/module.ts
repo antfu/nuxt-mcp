@@ -3,6 +3,9 @@ import type { Unimport } from 'unimport'
 import { addVitePlugin, defineNuxtModule } from '@nuxt/kit'
 import { ViteMcp } from 'vite-plugin-mcp'
 import { version } from '../package.json'
+import { registerNuxtCliTools } from './tools/nuxt-cli'
+import { registerNuxtModulesTools } from './tools/nuxt-modules'
+import { registerNuxtRuntimeTools } from './tools/nuxt-runtime'
 
 export interface ModuleOptions {
   /**
@@ -25,6 +28,9 @@ export default defineNuxtModule<ModuleOptions>({
   async setup(options, nuxt) {
     let unimport: Unimport
     let components: Component[] = []
+
+    const basePath = nuxt.options.rootDir
+
     nuxt.hook('imports:context', (_unimport) => {
       unimport = _unimport
     })
@@ -43,64 +49,14 @@ export default defineNuxtModule<ModuleOptions>({
         version,
       },
       mcpServerSetup(mcp) {
-        mcp.tool(
-          'get-nuxt-config',
-          'Get the Nuxt configuration, including the ssr, appDir, srcDir, rootDir, alias, runtimeConfig, modules, etc.',
-          {},
-          async () => {
-            return {
-              content: [{
-                type: 'text',
-                text: JSON.stringify({
-                  ssr: !!nuxt.options.ssr,
-                  appDir: nuxt.options.appDir,
-                  srcDir: nuxt.options.srcDir,
-                  rootDir: nuxt.options.rootDir,
-                  alias: nuxt.options.alias,
-                  runtimeConfig: {
-                    public: nuxt.options.runtimeConfig.public,
-                  },
-                  modules: nuxt.options._installedModules.map(i => i.meta.name || (i as any).name).filter(Boolean),
-                  imports: {
-                    autoImport: !!nuxt.options.imports.autoImport,
-                    ...nuxt.options.imports,
-                  },
-                  components: nuxt.options.components,
-                }),
-              }],
-            }
-          },
-        )
+        // Register Nuxt-specific tools
+        registerNuxtRuntimeTools(mcp, nuxt, unimport, components)
 
-        mcp.tool(
-          'get-nuxt-auto-imports-items',
-          'Get auto-imports items, when adding new functions to the code, check available items from this tool.',
-          {},
-          async () => {
-            return {
-              content: [{
-                type: 'text',
-                text: JSON.stringify({
-                  items: await unimport.getImports(),
-                }),
-              }],
-            }
-          },
-        )
+        // Register Nuxt modules-related tools
+        registerNuxtModulesTools(mcp)
 
-        mcp.tool(
-          'get-nuxt-components',
-          'Get components registered in the Nuxt app. When adding new components, check available components from this tool.',
-          {},
-          async () => {
-            return {
-              content: [{
-                type: 'text',
-                text: JSON.stringify(components),
-              }],
-            }
-          },
-        )
+        // Register Nuxt CLI tools
+        registerNuxtCliTools(mcp, basePath)
       },
     }), { client: true })
   },
