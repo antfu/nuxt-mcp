@@ -18,7 +18,7 @@ export function createMcpServerDefault(
 
   server.tool(
     'get-vite-config',
-    'Get the Vite configuration. This is the full Vite configuration object.',
+    'Get the Vite config digest, including the root, resolve, plugins, and environment names.',
     {},
     async () => ({
       content: [{
@@ -35,9 +35,10 @@ export function createMcpServerDefault(
 
   server.tool(
     'get-vite-module-info',
-    'Get information about a specific module given a absolute filepath',
+    'Get graph information of a module, including importers, imported modules, and compiled result.',
     {
-      filepath: z.string(),
+      filepath: z.string()
+        .describe('The absolute filepath of the module'),
     },
     async ({ filepath }) => {
       const records: any[] = []

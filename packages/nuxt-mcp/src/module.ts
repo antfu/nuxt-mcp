@@ -45,7 +45,7 @@ export default defineNuxtModule<ModuleOptions>({
       mcpServerSetup(mcp) {
         mcp.tool(
           'get-nuxt-config',
-          'Get the Nuxt configuration',
+          'Get the Nuxt configuration, including the ssr, appDir, srcDir, rootDir, alias, runtimeConfig, modules, etc.',
           {},
           async () => {
             return {
@@ -74,7 +74,7 @@ export default defineNuxtModule<ModuleOptions>({
 
         mcp.tool(
           'get-nuxt-auto-imports-items',
-          'Get the Nuxt configuration as JSON',
+          'Get auto-imports items, when adding new functions to the code, check available items from this tool.',
           {},
           async () => {
             return {
@@ -90,7 +90,7 @@ export default defineNuxtModule<ModuleOptions>({
 
         mcp.tool(
           'get-nuxt-components',
-          'Get components registered in the Nuxt app',
+          'Get components registered in the Nuxt app. When adding new components, check available components from this tool.',
           {},
           async () => {
             return {

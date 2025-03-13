@@ -6,12 +6,12 @@ packages:
 
 catalogs:
   cli:
-    '@antfu/eslint-config': ^4.9.0
+    '@antfu/eslint-config': ^4.10.1
     '@antfu/ni': ^24.1.0
     '@modelcontextprotocol/inspector': ^0.6.0
     bumpp: ^10.1.0
     eslint: ^9.22.0
-    lint-staged: ^15.4.3
+    lint-staged: ^15.5.0
     nodemon: ^3.1.9
     simple-git-hooks: ^2.11.1
     tsx: ^4.19.3
@@ -33,7 +33,6 @@ catalogs:
     h3: ^1.15.1
     pathe: ^2.0.3
     unimport: ^4.1.2
-    vite-plugin-mcp: workspace
     zod: ^3.24.2
   testing:
     vitest: ^3.0.8
