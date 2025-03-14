@@ -7,6 +7,8 @@ import { join } from 'pathe'
 import { searchForWorkspaceRoot } from 'vite'
 import { setupRoutes } from './connect'
 
+export * from './types'
+
 export function ViteMcp(options: ViteMcpOptions = {}): Plugin {
   const {
     mcpPath = '/__mcp',

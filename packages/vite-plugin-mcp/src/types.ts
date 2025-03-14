@@ -3,6 +3,8 @@ import type { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js'
 import type { Implementation as McpServerInfo } from '@modelcontextprotocol/sdk/types.js'
 import type { ViteDevServer } from 'vite'
 
+export type { McpServer }
+
 export interface ViteMcpOptions {
   /**
    * The host to listen on, default is `localhost`

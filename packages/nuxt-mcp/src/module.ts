@@ -1,8 +1,12 @@
-import type { Component } from '@nuxt/schema'
+import type { Nitro } from 'nitropack'
 import type { Unimport } from 'unimport'
+import type { McpToolContext } from './types'
 import { addVitePlugin, defineNuxtModule } from '@nuxt/kit'
 import { ViteMcp } from 'vite-plugin-mcp'
 import { version } from '../package.json'
+import { toolsNuxtDotComInfo } from './tools/nuxt-dot-com'
+import { toolsNuxtRuntime } from './tools/runtime'
+import { toolsScaffold } from './tools/scaffold'
 
 export interface ModuleOptions {
   /**
@@ -18,18 +22,18 @@ export default defineNuxtModule<ModuleOptions>({
     name: 'nuxt-mcp',
     configKey: 'mcp',
   },
-  // Default configuration options of the Nuxt module
   defaults: {
     updateCursorMcpJson: true,
   },
   async setup(options, nuxt) {
-    let unimport: Unimport
-    let components: Component[] = []
+    const unimport = promiseWithResolve<Unimport>()
+    const nitro = promiseWithResolve<Nitro>()
+
     nuxt.hook('imports:context', (_unimport) => {
-      unimport = _unimport
+      unimport.resolve(_unimport)
     })
-    nuxt.hook('components:extend', (_components) => {
-      components = _components
+    nuxt.hook('nitro:init', (_nitro) => {
+      nitro.resolve(_nitro)
     })
 
     addVitePlugin(ViteMcp({
@@ -42,66 +46,27 @@ export default defineNuxtModule<ModuleOptions>({
         name: 'nuxt',
         version,
       },
-      mcpServerSetup(mcp) {
-        mcp.tool(
-          'get-nuxt-config',
-          'Get the Nuxt configuration, including the ssr, appDir, srcDir, rootDir, alias, runtimeConfig, modules, etc.',
-          {},
-          async () => {
-            return {
-              content: [{
-                type: 'text',
-                text: JSON.stringify({
-                  ssr: !!nuxt.options.ssr,
-                  appDir: nuxt.options.appDir,
-                  srcDir: nuxt.options.srcDir,
-                  rootDir: nuxt.options.rootDir,
-                  alias: nuxt.options.alias,
-                  runtimeConfig: {
-                    public: nuxt.options.runtimeConfig.public,
-                  },
-                  modules: nuxt.options._installedModules.map(i => i.meta.name || (i as any).name).filter(Boolean),
-                  imports: {
-                    autoImport: !!nuxt.options.imports.autoImport,
-                    ...nuxt.options.imports,
-                  },
-                  components: nuxt.options.components,
-                }),
-              }],
-            }
-          },
-        )
+      mcpServerSetup(mcp, vite) {
+        const context: McpToolContext = {
+          unimport: unimport.promise,
+          nitro: nitro.promise,
+          nuxt,
+          vite,
+          mcp,
+        }
 
-        mcp.tool(
-          'get-nuxt-auto-imports-items',
-          'Get auto-imports items, when adding new functions to the code, check available items from this tool.',
-          {},
-          async () => {
-            return {
-              content: [{
-                type: 'text',
-                text: JSON.stringify({
-                  items: await unimport.getImports(),
-                }),
-              }],
-            }
-          },
-        )
-
-        mcp.tool(
-          'get-nuxt-components',
-          'Get components registered in the Nuxt app. When adding new components, check available components from this tool.',
-          {},
-          async () => {
-            return {
-              content: [{
-                type: 'text',
-                text: JSON.stringify(components),
-              }],
-            }
-          },
-        )
+        toolsNuxtRuntime(context)
+        toolsNuxtDotComInfo(context)
+        toolsScaffold(context)
       },
     }), { client: true })
   },
 })
+
+function promiseWithResolve<T>(): { promise: Promise<T>, resolve: (value: T) => void } {
+  let resolve: (value: T) => void = undefined!
+  const promise = new Promise<T>((_resolve) => {
+    resolve = _resolve
+  })
+  return { promise, resolve }
+}
