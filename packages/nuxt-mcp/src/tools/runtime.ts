@@ -32,8 +32,8 @@ export function toolsNuxtRuntime({ mcp, nuxt, unimport }: McpToolContext): void 
   )
 
   mcp.tool(
-    'get-nuxt-auto-imports-items',
-    'Get auto-imports items, when adding new functions to the code, check available items from this tool.',
+    'list-nuxt-auto-imports-items',
+    'List auto-imports items, when importing new functions to the code, check available items from this tool.',
     {},
     async () => {
       return {
@@ -53,8 +53,8 @@ export function toolsNuxtRuntime({ mcp, nuxt, unimport }: McpToolContext): void 
   })
 
   mcp.tool(
-    'get-nuxt-components',
-    'Get components registered in the Nuxt app. When adding new components, check available components from this tool.',
+    'list-nuxt-components',
+    'List registered components in the Nuxt app. When adding importing new components, check available components from this tool.',
     {},
     async () => {
       return {
@@ -72,8 +72,8 @@ export function toolsNuxtRuntime({ mcp, nuxt, unimport }: McpToolContext): void 
   })
 
   mcp.tool(
-    'get-nuxt-pages',
-    'Get registered pages and their metadata in the Nuxt app.',
+    'list-nuxt-pages',
+    'List registered pages and their metadata in the Nuxt app.',
     {},
     async () => {
       return {

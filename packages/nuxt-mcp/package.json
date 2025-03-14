@@ -38,6 +38,7 @@
     "@modelcontextprotocol/sdk": "catalog:prod",
     "@nuxt/kit": "catalog:nuxt",
     "ansis": "catalog:prod",
+    "async-cache-dedupe": "catalog:prod",
     "citty": "catalog:prod",
     "debug": "catalog:prod",
     "pathe": "catalog:prod",
