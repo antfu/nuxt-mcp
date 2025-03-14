@@ -6,7 +6,7 @@ import { ViteMcp } from 'vite-plugin-mcp'
 import { version } from '../package.json'
 import { toolsNuxtDotComInfo } from './tools/nuxt-dot-com'
 import { toolsNuxtRuntime } from './tools/runtime'
-import { registerNuxtCliTools } from './tools/scaffold'
+import { toolsScaffold } from './tools/scaffold'
 
 export interface ModuleOptions {
   /**
@@ -57,7 +57,7 @@ export default defineNuxtModule<ModuleOptions>({
 
         toolsNuxtRuntime(context)
         toolsNuxtDotComInfo(context)
-        registerNuxtCliTools(context)
+        toolsScaffold(context)
       },
     }), { client: true })
   },

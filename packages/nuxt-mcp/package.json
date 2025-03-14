@@ -31,11 +31,14 @@
   },
   "peerDependencies": {
     "nitropack": "^2 || ^3",
+    "nuxi": ">=3",
     "nuxt": ">=3.5.0"
   },
   "dependencies": {
     "@modelcontextprotocol/sdk": "catalog:prod",
     "@nuxt/kit": "catalog:nuxt",
+    "ansis": "catalog:prod",
+    "citty": "catalog:prod",
     "debug": "catalog:prod",
     "pathe": "catalog:prod",
     "unimport": "catalog:prod",
@@ -52,6 +55,7 @@
     "@types/node": "catalog:types",
     "eslint": "catalog:cli",
     "nitropack": "catalog:nuxt",
+    "nuxi": "catalog:nuxt",
     "nuxt": "catalog:nuxt",
     "typescript": "catalog:cli",
     "vitest": "catalog:testing",

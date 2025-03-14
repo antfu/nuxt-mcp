@@ -27,10 +27,12 @@ catalogs:
     '@nuxt/schema': ^3.16.0
     '@nuxt/test-utils': ^3.17.2
     nitropack: ^2.11.6
+    nuxi: ^3.23.0
     nuxt: ^3.16.0
   prod:
     '@modelcontextprotocol/sdk': ^1.7.0
     ansis: ^3.17.0
+    citty: ^0.1.6
     debug: ^4.4.0
     h3: ^1.15.1
     pathe: ^2.0.3
