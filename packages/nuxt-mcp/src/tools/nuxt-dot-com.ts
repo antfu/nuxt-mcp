@@ -1,25 +1,18 @@
-import type { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js'
+import type { McpToolContext } from '../types'
 import { z } from 'zod'
 
-/**
- * Register Nuxt modules-related MCP tools
- */
-export function registerNuxtModulesTools(server: McpServer): void {
+export function toolsNuxtDotComInfo({ mcp }: McpToolContext): void {
   // Module list command - lists available modules for the add command
-  server.tool(
+  mcp.tool(
     'get-nuxt-modules-list',
     'List all available Nuxt modules that can be added to your project using the \'add\' command. This provides a comprehensive list of official and community modules.',
     {
-      version: z.enum(['3', '2-bridge', '2']).optional().describe('Nuxt version to filter modules by'),
       category: z.string().optional().describe('Category to filter modules by'),
     },
-    async ({ version, category }) => {
+    async ({ category }) => {
       let url = 'https://api.nuxt.com/modules'
       const params = new URLSearchParams()
 
-      if (version) {
-        params.append('version', version)
-      }
       if (category) {
         params.append('category', category)
       }
@@ -45,7 +38,7 @@ export function registerNuxtModulesTools(server: McpServer): void {
   )
 
   // Module find command - finds a module by name
-  server.tool(
+  mcp.tool(
     'find-nuxt-module',
     'Find a Nuxt module by name',
     {
@@ -77,7 +70,7 @@ export function registerNuxtModulesTools(server: McpServer): void {
   )
 
   // Get module categories command
-  server.tool(
+  mcp.tool(
     'get-module-categories',
     'Get available Nuxt module categories',
     {

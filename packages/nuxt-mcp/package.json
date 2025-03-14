@@ -30,6 +30,7 @@
     "dev:prepare": "nuxt-module-build build --stub && nuxt-module-build prepare && nuxi prepare playground"
   },
   "peerDependencies": {
+    "nitropack": "^2 || ^3",
     "nuxt": ">=3.5.0"
   },
   "dependencies": {
@@ -50,6 +51,7 @@
     "@types/debug": "catalog:types",
     "@types/node": "catalog:types",
     "eslint": "catalog:cli",
+    "nitropack": "catalog:nuxt",
     "nuxt": "catalog:nuxt",
     "typescript": "catalog:cli",
     "vitest": "catalog:testing",

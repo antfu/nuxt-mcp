@@ -1,11 +1,12 @@
-import type { Component } from '@nuxt/schema'
+import type { Nitro } from 'nitropack'
 import type { Unimport } from 'unimport'
+import type { McpToolContext } from './types'
 import { addVitePlugin, defineNuxtModule } from '@nuxt/kit'
 import { ViteMcp } from 'vite-plugin-mcp'
 import { version } from '../package.json'
-import { registerNuxtCliTools } from './tools/nuxt-cli'
-import { registerNuxtModulesTools } from './tools/nuxt-modules'
-import { registerNuxtRuntimeTools } from './tools/nuxt-runtime'
+import { toolsNuxtDotComInfo } from './tools/nuxt-dot-com'
+import { toolsNuxtRuntime } from './tools/runtime'
+import { registerNuxtCliTools } from './tools/scaffold'
 
 export interface ModuleOptions {
   /**
@@ -21,21 +22,18 @@ export default defineNuxtModule<ModuleOptions>({
     name: 'nuxt-mcp',
     configKey: 'mcp',
   },
-  // Default configuration options of the Nuxt module
   defaults: {
     updateCursorMcpJson: true,
   },
   async setup(options, nuxt) {
-    let unimport: Unimport
-    let components: Component[] = []
-
-    const basePath = nuxt.options.rootDir
+    const unimport = promiseWithResolve<Unimport>()
+    const nitro = promiseWithResolve<Nitro>()
 
     nuxt.hook('imports:context', (_unimport) => {
-      unimport = _unimport
+      unimport.resolve(_unimport)
     })
-    nuxt.hook('components:extend', (_components) => {
-      components = _components
+    nuxt.hook('nitro:init', (_nitro) => {
+      nitro.resolve(_nitro)
     })
 
     addVitePlugin(ViteMcp({
@@ -48,16 +46,27 @@ export default defineNuxtModule<ModuleOptions>({
         name: 'nuxt',
         version,
       },
-      mcpServerSetup(mcp) {
-        // Register Nuxt-specific tools
-        registerNuxtRuntimeTools(mcp, nuxt, unimport, components)
+      mcpServerSetup(mcp, vite) {
+        const context: McpToolContext = {
+          unimport: unimport.promise,
+          nitro: nitro.promise,
+          nuxt,
+          vite,
+          mcp,
+        }
 
-        // Register Nuxt modules-related tools
-        registerNuxtModulesTools(mcp)
-
-        // Register Nuxt CLI tools
-        registerNuxtCliTools(mcp, basePath)
+        toolsNuxtRuntime(context)
+        toolsNuxtDotComInfo(context)
+        registerNuxtCliTools(context)
       },
     }), { client: true })
   },
 })
+
+function promiseWithResolve<T>(): { promise: Promise<T>, resolve: (value: T) => void } {
+  let resolve: (value: T) => void = undefined!
+  const promise = new Promise<T>((_resolve) => {
+    resolve = _resolve
+  })
+  return { promise, resolve }
+}

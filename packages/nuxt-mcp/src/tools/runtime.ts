@@ -1,16 +1,7 @@
-import type { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js'
-import type { Component, NuxtOptions } from '@nuxt/schema'
-import type { Unimport } from 'unimport'
+import type { Component, NuxtPage } from '@nuxt/schema'
+import type { McpToolContext } from '../types'
 
-/**
- * Register Nuxt-specific MCP tools
- */
-export function registerNuxtRuntimeTools(
-  mcp: McpServer,
-  nuxt: { options: NuxtOptions },
-  unimport: Unimport,
-  components: Component[],
-): void {
+export function toolsNuxtRuntime({ mcp, nuxt, unimport }: McpToolContext): void {
   mcp.tool(
     'get-nuxt-config',
     'Get the Nuxt configuration, including the ssr, appDir, srcDir, rootDir, alias, runtimeConfig, modules, etc.',
@@ -49,12 +40,17 @@ export function registerNuxtRuntimeTools(
         content: [{
           type: 'text',
           text: JSON.stringify({
-            items: await unimport.getImports(),
+            items: await (await unimport).getImports(),
           }, null, 2),
         }],
       }
     },
   )
+
+  let components: Component[] = []
+  nuxt.hook('components:extend', (_components) => {
+    components = _components
+  })
 
   mcp.tool(
     'get-nuxt-components',
@@ -65,6 +61,25 @@ export function registerNuxtRuntimeTools(
         content: [{
           type: 'text',
           text: JSON.stringify(components, null, 2),
+        }],
+      }
+    },
+  )
+
+  let pages: NuxtPage[] = []
+  nuxt.hook('pages:extend', (_pages) => {
+    pages = _pages
+  })
+
+  mcp.tool(
+    'get-nuxt-pages',
+    'Get registered pages and their metadata in the Nuxt app.',
+    {},
+    async () => {
+      return {
+        content: [{
+          type: 'text',
+          text: JSON.stringify(pages, null, 2),
         }],
       }
     },

@@ -1,4 +1,4 @@
-import type { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js'
+import type { McpToolContext } from '../types'
 import { exec } from 'node:child_process'
 import { promisify } from 'node:util'
 import { z } from 'zod'
@@ -53,9 +53,9 @@ export function formatCommandResult(result: CommandResult): string {
 /**
  * Register Nuxt CLI tools
  */
-export function registerNuxtCliTools(server: McpServer, basePath: string): void {
+export function registerNuxtCliTools({ mcp, nuxt }: McpToolContext): void {
   // Add component command
-  server.tool(
+  mcp.tool(
     'add-nuxt-component',
     'Add a new component to your Nuxt project.\n\nExample: \'TheHeader\' will create components/TheHeader.vue',
     {
@@ -91,7 +91,7 @@ export function registerNuxtCliTools(server: McpServer, basePath: string): void 
   // === Page Commands ===
 
   // Add page command
-  server.tool(
+  mcp.tool(
     'add-nuxt-page',
     'Add a new page to your Nuxt project.\n\nExamples:\n- \'about\' will create pages/about.vue\n- \'category/[id]\' will create pages/category/[id].vue',
     {
@@ -119,7 +119,7 @@ export function registerNuxtCliTools(server: McpServer, basePath: string): void 
   )
 
   // Add layout command
-  server.tool(
+  mcp.tool(
     'add-nuxt-layout',
     'Add a new layout to your Nuxt project.\n\nExample: \'custom\' will create layouts/custom.vue',
     {
@@ -150,7 +150,7 @@ export function registerNuxtCliTools(server: McpServer, basePath: string): void 
   // === Server Commands ===
 
   // Add API endpoint command
-  server.tool(
+  mcp.tool(
     'add-nuxt-api',
     'Add a new API endpoint to your Nuxt project.\n\nExample: \'hello\' will create server/api/hello.ts',
     {
@@ -182,7 +182,7 @@ export function registerNuxtCliTools(server: McpServer, basePath: string): void 
   )
 
   // Add middleware command
-  server.tool(
+  mcp.tool(
     'add-nuxt-middleware',
     'Add a new middleware to your Nuxt project.\n\nExample: \'auth\' will create middleware/auth.ts',
     {
@@ -218,7 +218,7 @@ export function registerNuxtCliTools(server: McpServer, basePath: string): void 
   // === Code Organization Commands ===
 
   // Add composable command
-  server.tool(
+  mcp.tool(
     'add-nuxt-composable',
     'Add a new composable to your Nuxt project.\n\nExample: \'useFoo\' will create composables/useFoo.ts',
     {
@@ -247,7 +247,7 @@ export function registerNuxtCliTools(server: McpServer, basePath: string): void 
   )
 
   // Add plugin command
-  server.tool(
+  mcp.tool(
     'add-nuxt-plugin',
     'Add a new plugin to your Nuxt project.\n\nExample: \'analytics\' will create plugins/analytics.ts',
     {
@@ -280,7 +280,7 @@ export function registerNuxtCliTools(server: McpServer, basePath: string): void 
   )
 
   // Add layer command
-  server.tool(
+  mcp.tool(
     'add-nuxt-layer',
     'Add a new layer to your Nuxt project.\n\nExample: \'subscribe\' will create layers/subscribe/nuxt.config.ts',
     {
@@ -311,9 +311,9 @@ export function registerNuxtCliTools(server: McpServer, basePath: string): void 
   // === Project Management Commands ===
 
   // Dev command - starts the development server
-  server.tool(
+  mcp.tool(
     'run-nuxt-dev',
-    'Start the Nuxt development server. This will launch a local development server with hot-reloading enabled.\n\nExample: To start the server on port 4000: Use port parameter with value 4000',
+    'Start the Nuxt development mcp. This will launch a local development server with hot-reloading enabled.\n\nExample: To start the server on port 4000: Use port parameter with value 4000',
     {
       port: z.number().optional().describe('Port to run the dev server on (defaults to 3000)'),
       host: z.string().optional().describe('Host to run the dev server on (defaults to localhost)'),
@@ -346,7 +346,7 @@ export function registerNuxtCliTools(server: McpServer, basePath: string): void 
   )
 
   // Build command - builds the Nuxt application for production
-  server.tool(
+  mcp.tool(
     'run-nuxt-build',
     'Build the Nuxt application for production',
     {
@@ -374,7 +374,7 @@ export function registerNuxtCliTools(server: McpServer, basePath: string): void 
   )
 
   // Generate command - generates a static site
-  server.tool(
+  mcp.tool(
     'run-nuxt-generate',
     'Generate a static site with Nuxt',
     async () => {
@@ -399,7 +399,7 @@ export function registerNuxtCliTools(server: McpServer, basePath: string): void 
   )
 
   // Preview command - previews the built application
-  server.tool(
+  mcp.tool(
     'run-nuxt-preview',
     'Preview the built Nuxt application',
     async () => {
@@ -424,7 +424,7 @@ export function registerNuxtCliTools(server: McpServer, basePath: string): void 
   )
 
   // Init command - initializes a new Nuxt project
-  server.tool(
+  mcp.tool(
     'run-nuxt-init',
     'Initialize a new Nuxt project. This creates a new directory with a fresh Nuxt.js installation and project structure.\n\nExample: To create a new project called \'my-app\': Use name parameter with value \'my-app\'',
     {
@@ -452,7 +452,7 @@ export function registerNuxtCliTools(server: McpServer, basePath: string): void 
   )
 
   // Info command - displays information about the Nuxt project
-  server.tool(
+  mcp.tool(
     'get-nuxt-info',
     'Display information about the Nuxt project',
     async () => {
@@ -477,7 +477,7 @@ export function registerNuxtCliTools(server: McpServer, basePath: string): void 
   )
 
   // Upgrade command - upgrades Nuxt dependencies
-  server.tool(
+  mcp.tool(
     'run-nuxt-upgrade',
     'Upgrade Nuxt dependencies',
     async () => {
@@ -502,7 +502,7 @@ export function registerNuxtCliTools(server: McpServer, basePath: string): void 
   )
 
   // Cleanup command - removes generated Nuxt files and caches
-  server.tool(
+  mcp.tool(
     'run-nuxt-cleanup',
     'Remove common generated Nuxt files and caches, including .nuxt, .output, node_modules/.vite, and node_modules/.cache directories.',
     async () => {
@@ -527,7 +527,7 @@ export function registerNuxtCliTools(server: McpServer, basePath: string): void 
   )
 
   // Module install command - installs a Nuxt module
-  server.tool(
+  mcp.tool(
     'install-nuxt-module',
     'Install or add a Nuxt module into your project',
     {

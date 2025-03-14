@@ -20,12 +20,13 @@ catalogs:
     vite: ^6.2.1
     vue-tsc: ^2.2.8
   nuxt:
-    '@nuxt/devtools': ^2.2.1
+    '@nuxt/devtools': ^2.3.0
     '@nuxt/eslint-config': ^1.2.0
     '@nuxt/kit': ^3.16.0
     '@nuxt/module-builder': ^0.8.4
     '@nuxt/schema': ^3.16.0
     '@nuxt/test-utils': ^3.17.2
+    nitropack: ^2.11.6
     nuxt: ^3.16.0
   prod:
     '@modelcontextprotocol/sdk': ^1.7.0
