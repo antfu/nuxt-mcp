@@ -84,4 +84,19 @@ export function toolsNuxtRuntime({ mcp, nuxt, unimport }: McpToolContext): void 
       }
     },
   )
+
+  mcp.tool(
+    'list-nuxt-hooks',
+    'List registered hooks in the Nuxt app.',
+    {},
+    async () => {
+      return {
+        content: [{
+          type: 'text',
+          // @ts-expect-error - private _hooks property
+          text: JSON.stringify(Object.keys(nuxt.hooks._hooks), null, 2),
+        }],
+      }
+    },
+  )
 }
