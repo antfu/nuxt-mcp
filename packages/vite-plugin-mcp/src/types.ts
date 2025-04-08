@@ -57,4 +57,18 @@ export interface ViteMcpOptions {
      */
     serverName?: string
   }
+
+  /**
+   * Update the address of the MCP server in the VSCode config file `settings.json`,
+   * if VSCode config file exists.
+   *
+   * @default true
+   */
+  updateVSCodeMcpJson?: boolean | {
+    enabled: boolean
+    /**
+     * The name of the MCP server, default is `vite`
+     */
+    serverName?: string
+  }
 }

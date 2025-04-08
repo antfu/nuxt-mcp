@@ -16,6 +16,12 @@ export interface ModuleOptions {
    * @default true
    */
   updateCursorMcpJson?: boolean
+  /**
+   * Update MCP url to `.vscode/mcp.json` automatically
+   *
+   * @default true
+   */
+  updateVSCodeMcpJson?: boolean
 }
 
 export interface ModuleHooks {
@@ -29,6 +35,7 @@ export default defineNuxtModule<ModuleOptions>({
   },
   defaults: {
     updateCursorMcpJson: true,
+    updateVSCodeMcpJson: true,
   },
   async setup(options, nuxt) {
     const unimport = promiseWithResolve<Unimport>()
@@ -45,6 +52,10 @@ export default defineNuxtModule<ModuleOptions>({
       port: nuxt.options.devServer.port,
       updateCursorMcpJson: {
         enabled: !!options.updateCursorMcpJson,
+        serverName: 'nuxt',
+      },
+      updateVSCodeMcpJson: {
+        enabled: !!options.updateVSCodeMcpJson,
         serverName: 'nuxt',
       },
       mcpServerInfo: {
