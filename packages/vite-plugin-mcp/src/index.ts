@@ -36,7 +36,7 @@ export function ViteMcp(options: ViteMcpOptions = {}): Plugin {
       if (cursorMcpOptions.enabled) {
         if (existsSync(join(root, '.cursor'))) {
           const mcp = existsSync(join(root, '.cursor/mcp.json'))
-            ? JSON.parse(await fs.readFile(join(root, '.cursor/mcp.json'), 'utf-8'))
+            ? JSON.parse(await fs.readFile(join(root, '.cursor/mcp.json'), 'utf-8') || '{}')
             : {}
           mcp.mcpServers ||= {}
           mcp.mcpServers[cursorMcpOptions.serverName || 'vite'] = { url: sseUrl }

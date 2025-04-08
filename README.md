@@ -14,7 +14,7 @@ This monorepo contains two packages:
 - [`vite-plugin-mcp`](./packages/vite-plugin-mcp) - A Vite plugin for adding MCP support to your Vite app.
 
 > [!IMPORTANT]
-> Experimental. Not ready for production.
+> Experimental. Use with caution.
 
 ## Sponsors
 

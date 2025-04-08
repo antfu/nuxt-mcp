@@ -18,6 +18,10 @@ export interface ModuleOptions {
   updateCursorMcpJson?: boolean
 }
 
+export interface ModuleHooks {
+  'mcp:setup': (context: McpToolContext) => void
+}
+
 export default defineNuxtModule<ModuleOptions>({
   meta: {
     name: 'nuxt-mcp',
@@ -47,7 +51,7 @@ export default defineNuxtModule<ModuleOptions>({
         name: 'nuxt',
         version,
       },
-      mcpServerSetup(mcp, vite) {
+      async mcpServerSetup(mcp, vite) {
         const context: McpToolContext = {
           unimport: unimport.promise,
           nitro: nitro.promise,
@@ -60,6 +64,8 @@ export default defineNuxtModule<ModuleOptions>({
         toolsNuxtRuntime(context)
         toolsNuxtDotComInfo(context)
         toolsScaffold(context)
+
+        await nuxt.callHook('mcp:setup', context)
       },
     }), { client: true })
   },
