@@ -220,6 +220,9 @@ importers:
       unimport:
         specifier: catalog:prod
         version: 4.2.0
+      vite:
+        specifier: '>=6'
+        version: 6.2.5(@types/node@22.14.0)(jiti@2.4.2)(terser@5.39.0)(tsx@4.19.3)(yaml@2.7.1)
       vite-plugin-mcp:
         specifier: workspace:*
         version: link:../vite-plugin-mcp
