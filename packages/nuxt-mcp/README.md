@@ -9,7 +9,7 @@
 MCP server helping models to understand your Nuxt app better.
 
 > [!IMPORTANT]
-> Experimental. Not ready for production.
+> Experimental. Use with caution.
 
 ```ts
 // nuxt.config.ts
@@ -22,6 +22,34 @@ export default defineNuxtConfig({
 Then the MCP server will be available at `http://localhost:3000/__mcp/sse`.
 
 If you are using Cursor, create a `.cursor/mcp.json` file in your project root, this plugin will automatically update it for you.
+
+## Module Hooks
+
+For other modules to provide information to MCP, you can use the `mcp:setup` hook.
+
+```ts
+// src/module.ts
+
+export default defineNuxtModule({
+  meta: {
+    name: 'my-module',
+  },
+  async setup(options, nuxt) {
+    nuxt.hook('mcp:setup', ({ mcp }) => {
+      // Setup your MCP tools here
+      // For example
+      mcp.tool('get-nuxt-root', 'Get the Nuxt root path', {}, async () => {
+        return {
+          content: [{
+            type: 'text',
+            text: nuxt.options.rootDir,
+          }],
+        }
+      })
+    })
+  },
+})
+```
 
 ## Sponsors
 
