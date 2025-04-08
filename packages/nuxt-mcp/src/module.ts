@@ -76,6 +76,8 @@ export default defineNuxtModule<ModuleOptions>({
         toolsNuxtDotComInfo(context)
         toolsScaffold(context)
 
+        // eslint-disable-next-line ts/ban-ts-comment
+        // @ts-ignore skip type infer
         await nuxt.callHook('mcp:setup', context)
       },
     }), { client: true })
