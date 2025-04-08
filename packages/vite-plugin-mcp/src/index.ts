@@ -13,6 +13,7 @@ export function ViteMcp(options: ViteMcpOptions = {}): Plugin {
   const {
     mcpPath = '/__mcp',
     updateCursorMcpJson = true,
+    updateVSCodeMcpJson = true,
     printUrl = true,
     mcpServer = (vite: ViteDevServer) => import('./server').then(m => m.createMcpServerDefault(options, vite)),
   } = options
@@ -20,6 +21,10 @@ export function ViteMcp(options: ViteMcpOptions = {}): Plugin {
   const cursorMcpOptions = typeof updateCursorMcpJson == 'boolean'
     ? { enabled: updateCursorMcpJson }
     : updateCursorMcpJson
+
+  const vscodeMcpOptions = typeof updateVSCodeMcpJson == 'boolean'
+    ? { enabled: updateVSCodeMcpJson }
+    : updateVSCodeMcpJson
 
   return {
     name: 'vite-plugin-mcp',
@@ -41,6 +46,21 @@ export function ViteMcp(options: ViteMcpOptions = {}): Plugin {
           mcp.mcpServers ||= {}
           mcp.mcpServers[cursorMcpOptions.serverName || 'vite'] = { url: sseUrl }
           await fs.writeFile(join(root, '.cursor/mcp.json'), `${JSON.stringify(mcp, null, 2)}\n`)
+        }
+      }
+
+      if (vscodeMcpOptions.enabled) {
+        const vscodeConfig = join(root, '.vscode/settings.json')
+        if (existsSync(vscodeConfig)) {
+          const mcp = existsSync(join(root, '.vscode/mcp.json'))
+            ? JSON.parse(await fs.readFile(join(root, '.vscode/mcp.json'), 'utf-8') || '{}')
+            : {}
+          mcp.servers ||= {}
+          mcp.servers[vscodeMcpOptions.serverName || 'vite'] = {
+            type: 'sse',
+            url: sseUrl,
+          }
+          await fs.writeFile(join(root, '.vscode/mcp.json'), `${JSON.stringify(mcp, null, 2)}\n`)
         }
       }
 
