@@ -4,6 +4,7 @@ import type { McpToolContext } from './types'
 import { addVitePlugin, defineNuxtModule } from '@nuxt/kit'
 import { ViteMcp } from 'vite-plugin-mcp'
 import { version } from '../package.json'
+import { promptNuxtBasic } from './prompts/basic'
 import { toolsNuxtDotComInfo } from './tools/nuxt-dot-com'
 import { toolsNuxtRuntime } from './tools/runtime'
 import { toolsScaffold } from './tools/scaffold'
@@ -70,10 +71,13 @@ export default defineNuxtModule<ModuleOptions>({
           mcp,
         }
 
+        promptNuxtBasic(context)
         toolsNuxtRuntime(context)
         toolsNuxtDotComInfo(context)
         toolsScaffold(context)
 
+        // eslint-disable-next-line ts/ban-ts-comment
+        // @ts-ignore skip type infer
         await nuxt.callHook('mcp:setup', context)
       },
     }), { client: true })
