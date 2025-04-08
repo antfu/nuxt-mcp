@@ -32,7 +32,8 @@
   "peerDependencies": {
     "nitropack": "^2 || ^3",
     "nuxi": ">=3",
-    "nuxt": ">=3.5.0"
+    "nuxt": ">=3.5.0",
+    "vite": ">=6"
   },
   "dependencies": {
     "@modelcontextprotocol/sdk": "catalog:prod",
