@@ -27,7 +27,7 @@ export function createMcpServerDefault(
           root: vite.config.root,
           resolve: vite.config.resolve,
           plugins: vite.config.plugins.map(p => p.name).filter(Boolean),
-          environmentNames: Object.keys(vite.environments),
+          environmentNames: Object.keys(vite.config.env),
         }),
       }],
     }),
@@ -42,7 +42,7 @@ export function createMcpServerDefault(
     },
     async ({ filepath }) => {
       const records: any[] = []
-      Object.entries(vite.environments).forEach(([key, env]) => {
+      Object.entries(vite.config.env).forEach(([key, env]) => {
         const mods = env.moduleGraph.getModulesByFile(filepath)
         for (const mod of mods || []) {
           records.push({
