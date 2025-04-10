@@ -36,7 +36,8 @@ export function ViteMcp(options: ViteMcpOptions = {}): Plugin {
       const port = vite.config.server.port
       const root = searchForWorkspaceRoot(vite.config.root)
 
-      const sseUrl = `http://${options.host || 'localhost'}:${options.port || port}${mcpPath}/sse`
+      const protocol = vite.config.server.https ? 'https' : 'http'
+      const sseUrl = `${protocol}://${options.host || 'localhost'}:${options.port || port}${mcpPath}/sse`
 
       if (cursorMcpOptions.enabled) {
         if (existsSync(join(root, '.cursor'))) {
