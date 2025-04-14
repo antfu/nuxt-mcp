@@ -11,7 +11,7 @@ catalogs:
     '@modelcontextprotocol/inspector': ^0.8.2
     bumpp: ^10.1.0
     eslint: ^9.24.0
-    lint-staged: ^15.5.0
+    lint-staged: ^15.5.1
     nodemon: ^3.1.9
     simple-git-hooks: ^2.12.1
     tsx: ^4.19.3
@@ -37,7 +37,7 @@ catalogs:
     debug: ^4.4.0
     h3: ^1.15.1
     pathe: ^2.0.3
-    unimport: ^4.2.0
+    unimport: ^5.0.0
     zod: ^3.24.2
   testing:
     vitest: ^3.1.1
@@ -48,7 +48,7 @@ catalogs:
     '@types/node': latest
   utils:
     '@antfu/utils': ^9.2.0
-    tinyexec: ^0.3.2
+    tinyexec: ^1.0.1
 onlyBuiltDependencies:
   - esbuild
   - simple-git-hooks
