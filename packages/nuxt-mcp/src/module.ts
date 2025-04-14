@@ -91,3 +91,15 @@ function promiseWithResolve<T>(): { promise: Promise<T>, resolve: (value: T) => 
   })
   return { promise, resolve }
 }
+
+declare module 'nuxt/schema' {
+  interface NuxtHooks {
+    'mcp:setup': (ctx: McpToolContext) => void | Promise<void>
+  }
+}
+
+declare module '@nuxt/schema' {
+  interface NuxtHooks {
+    'mcp:setup': (ctx: McpToolContext) => void | Promise<void>
+  }
+}
