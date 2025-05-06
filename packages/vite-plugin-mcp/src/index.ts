@@ -2,6 +2,7 @@ import type { Plugin, ViteDevServer } from 'vite'
 import type { ViteMcpOptions } from './types'
 import { existsSync } from 'node:fs'
 import fs from 'node:fs/promises'
+import { homedir } from 'node:os'
 import c from 'ansis'
 import { join } from 'pathe'
 import { searchForWorkspaceRoot } from 'vite'
@@ -14,6 +15,7 @@ export function ViteMcp(options: ViteMcpOptions = {}): Plugin {
     mcpPath = '/__mcp',
     updateCursorMcpJson = true,
     updateVSCodeMcpJson = true,
+    updateWindsurfMcpJson = true,
     printUrl = true,
     mcpServer = (vite: ViteDevServer) => import('./server').then(m => m.createMcpServerDefault(options, vite)),
   } = options
@@ -25,6 +27,10 @@ export function ViteMcp(options: ViteMcpOptions = {}): Plugin {
   const vscodeMcpOptions = typeof updateVSCodeMcpJson == 'boolean'
     ? { enabled: updateVSCodeMcpJson }
     : updateVSCodeMcpJson
+
+  const windsurfMcpOptions = typeof updateWindsurfMcpJson === 'boolean'
+    ? { enabled: updateWindsurfMcpJson }
+    : updateWindsurfMcpJson
 
   return {
     name: 'vite-plugin-mcp',
@@ -62,6 +68,25 @@ export function ViteMcp(options: ViteMcpOptions = {}): Plugin {
             url: sseUrl,
           }
           await fs.writeFile(join(root, '.vscode/mcp.json'), `${JSON.stringify(mcp, null, 2)}\n`)
+        }
+      }
+
+      if (windsurfMcpOptions.enabled) {
+        const windsurfDir = join(homedir(), '.codeium', 'windsurf')
+        const windsurfConfigPath = join(windsurfDir, 'mcp_config.json')
+        try {
+          if (!existsSync(windsurfDir)) {
+            await fs.mkdir(windsurfDir, { recursive: true })
+          }
+          const config = existsSync(windsurfConfigPath)
+            ? JSON.parse(await fs.readFile(windsurfConfigPath, 'utf-8').catch(() => '{}') || '{}')
+            : {}
+          config.mcpServers ||= {}
+          config.mcpServers[windsurfMcpOptions.serverName || 'vite'] = { url: sseUrl }
+          await fs.writeFile(windsurfConfigPath, `${JSON.stringify(config, null, 2)}\n`)
+        }
+        catch (e) {
+          console.error(`${c.red.bold('  ➜  MCP (Windsurf): ')}Failed to update ${windsurfConfigPath}`, e)
         }
       }
 
