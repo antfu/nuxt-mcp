@@ -22,6 +22,12 @@ export interface ModuleOptions {
    * @default true
    */
   updateVSCodeMcpJson?: boolean
+  /**
+   * Update MCP url to `~/.codeium/windsurf/mcp_config.json` automatically
+   *
+   * @default true
+   */
+  updateWindsurfMcpJson?: boolean
 }
 
 export interface ModuleHooks {
@@ -36,6 +42,7 @@ export default defineNuxtModule<ModuleOptions>({
   defaults: {
     updateCursorMcpJson: true,
     updateVSCodeMcpJson: true,
+    updateWindsurfMcpJson: true,
   },
   async setup(options, nuxt) {
     const unimport = promiseWithResolve<Unimport>()
@@ -56,6 +63,10 @@ export default defineNuxtModule<ModuleOptions>({
       },
       updateVSCodeMcpJson: {
         enabled: !!options.updateVSCodeMcpJson,
+        serverName: 'nuxt',
+      },
+      updateWindsurfMcpJson: {
+        enabled: !!options.updateWindsurfMcpJson,
         serverName: 'nuxt',
       },
       mcpServerInfo: {

@@ -71,4 +71,18 @@ export interface ViteMcpOptions {
      */
     serverName?: string
   }
+
+  /**
+   * Update the address of the MCP server in the Windsurf config file `~/.codeium/windsurf/mcp_config.json`,
+   * if Windsurf config file exists.
+   *
+   * @default true
+   */
+  updateWindsurfMcpJson?: boolean | {
+    enabled: boolean
+    /**
+     * The name of the MCP server, default is `vite`
+     */
+    serverName?: string
+  }
 }
