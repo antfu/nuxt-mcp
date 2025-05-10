@@ -21,8 +21,7 @@ export default defineNuxtConfig({
 
 Then the MCP server will be available at `http://localhost:3000/__mcp/sse`.
 
-- If you are using VSCode, create a `.vscode/mcp.json` file in your project root, this plugin will automatically update it for you.
-- If you are using Cursor, create a `.cursor/mcp.json` file in your project root, this plugin will automatically update it for you.
+> 💡 When using VSCode, Cursor, Windsurf, the module will automatically update the config files for you.
 
 ## Module Hooks
 

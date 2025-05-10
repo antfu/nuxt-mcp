@@ -24,8 +24,9 @@ export default defineConfig({
 
 Then the MCP server will be available at `http://localhost:5173/__mcp/sse`.
 
-- If you are using VSCode, create a `.vscode/mcp.json` file in your project root, this plugin will automatically update it for you.
-- If you are using Cursor, create a `.cursor/mcp.json` file in your project root, this plugin will automatically update it for you.
+> 💡 When using VSCode, Cursor, Windsurf, the module will automatically update the config files for you.
+>
+> You can configure that in the options with `updateConfig` and `updateConfigServerName`.
 
 ## Sponsors
 
