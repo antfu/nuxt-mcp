@@ -10,6 +10,15 @@ import { toolsNuxtRuntime } from './tools/runtime'
 import { toolsScaffold } from './tools/scaffold'
 
 export interface ModuleOptions extends ViteMcpOptions {
+  /**
+   * Includes the online Nuxt MCP server from https://mcp.nuxt.space/sse
+   *
+   * This MCP would provide information about the Nuxt ecosystem, including
+   * the latest documentation, available modules, etc.
+   *
+   * @default true
+   */
+  includeNuxtDocsMcp?: boolean
 }
 
 export interface ModuleHooks {
@@ -21,7 +30,9 @@ export default defineNuxtModule<ModuleOptions>({
     name: 'nuxt-mcp',
     configKey: 'mcp',
   },
-  defaults: {},
+  defaults: {
+    includeNuxtDocsMcp: true,
+  },
   async setup(options, nuxt) {
     const unimport = promiseWithResolve<Unimport>()
     const nitro = promiseWithResolve<Nitro>()
@@ -36,6 +47,16 @@ export default defineNuxtModule<ModuleOptions>({
     addVitePlugin(ViteMcp({
       updateConfigServerName: 'nuxt-local',
       ...options,
+      updateConfigAdditionalServers: [
+        ...options.updateConfigAdditionalServers || [],
+        ...(
+          options.includeNuxtDocsMcp
+            ? [{
+                name: 'nuxt-docs',
+                url: 'https://mcp.nuxt.space/sse',
+              }]
+            : []),
+      ],
       port: nuxt.options.devServer.port,
       async mcpServerSetup(mcp, vite) {
         await options.mcpServerSetup?.(mcp, vite)
@@ -57,7 +78,7 @@ export default defineNuxtModule<ModuleOptions>({
         // @ts-ignore skip type infer
         await nuxt.callHook('mcp:setup', context)
       },
-    }), { client: true })
+    }), { client: true, server: false })
   },
 })
 

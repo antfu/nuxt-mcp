@@ -5,6 +5,11 @@ import type { ViteDevServer } from 'vite'
 
 export type SupportedUpdateConfigType = 'cursor' | 'vscode' | 'windsurf'
 
+export interface UpdateConfigAdditionalServer {
+  name: string
+  url: string
+}
+
 export type MaybeArray<T> = T | T[]
 
 export type { McpServer }
@@ -59,6 +64,11 @@ export interface ViteMcpOptions {
    * @default 'auto'
    */
   updateConfig?: 'auto' | false | MaybeArray<SupportedUpdateConfigType>
+
+  /**
+   * Additional servers to update the config files
+   */
+  updateConfigAdditionalServers?: UpdateConfigAdditionalServer[]
 
   /**
    * The name of the MCP server when updating the config files
