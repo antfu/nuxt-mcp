@@ -12,13 +12,14 @@ export * from './types'
 
 export function ViteMcp(options: ViteMcpOptions = {}): Plugin {
   const {
-    mcpPath = '/__mcp',
     updateCursorMcpJson = true,
     updateVSCodeMcpJson = true,
     updateWindsurfMcpJson = true,
     printUrl = true,
     mcpServer = (vite: ViteDevServer) => import('./server').then(m => m.createMcpServerDefault(options, vite)),
   } = options
+
+  const mcpRoute = options.mcpRouteRoot ?? options.mcpPath ?? '/__mcp'
 
   const cursorMcpOptions = typeof updateCursorMcpJson == 'boolean'
     ? { enabled: updateCursorMcpJson }
@@ -37,13 +38,13 @@ export function ViteMcp(options: ViteMcpOptions = {}): Plugin {
     async configureServer(vite) {
       let mcp = await mcpServer(vite)
       mcp = await options.mcpServerSetup?.(mcp, vite) || mcp
-      await setupRoutes(mcpPath, mcp, vite)
+      await setupRoutes(mcpRoute, mcp, vite)
 
       const port = vite.config.server.port
       const root = searchForWorkspaceRoot(vite.config.root)
 
       const protocol = vite.config.server.https ? 'https' : 'http'
-      const sseUrl = `${protocol}://${options.host || 'localhost'}:${options.port || port}${mcpPath}/sse`
+      const sseUrl = `${protocol}://${options.host || 'localhost'}:${options.port || port}${mcpRoute}/sse`
 
       if (cursorMcpOptions.enabled) {
         if (existsSync(join(root, '.cursor'))) {

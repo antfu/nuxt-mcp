@@ -40,9 +40,9 @@ export interface ViteMcpOptions {
   mcpServerSetup?: (server: McpServer, viteServer: ViteDevServer) => Awaitable<void | McpServer>
 
   /**
-   * The path to the MCP server, default is `/__mcp`
+   * The root route to the MCP server, default is `/__mcp`
    */
-  mcpPath?: string
+  mcpRouteRoot?: string
 
   /**
    * Update the address of the MCP server in the cursor config file `.cursor/mcp.json`,
@@ -85,4 +85,9 @@ export interface ViteMcpOptions {
      */
     serverName?: string
   }
+
+  /**
+   * @deprecated Use `mcpRouteRoot` instead
+   */
+  mcpPath?: string
 }
