@@ -3,6 +3,10 @@ import type { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js'
 import type { Implementation as McpServerInfo } from '@modelcontextprotocol/sdk/types.js'
 import type { ViteDevServer } from 'vite'
 
+export type SupportedUpdateConfigType = 'cursor' | 'vscode' | 'windsurf'
+
+export type MaybeArray<T> = T | T[]
+
 export type { McpServer }
 
 export interface ViteMcpOptions {
@@ -45,46 +49,25 @@ export interface ViteMcpOptions {
   mcpRouteRoot?: string
 
   /**
-   * Update the address of the MCP server in the cursor config file `.cursor/mcp.json`,
-   * if `.cursor` folder exists.
+   * The config types to update
    *
-   * @default true
+   * - `auto` - Automatically update the config files if they exists
+   * - `cursor` - Update the cursor config file `.cursor/mcp.json`
+   * - `vscode` - Update the VSCode config file `.vscode/settings.json`
+   * - `windsurf` - Update the Windsurf config file `~/.codeium/windsurf/mcp_config.json`
+   *
+   * @default 'auto'
    */
-  updateCursorMcpJson?: boolean | {
-    enabled: boolean
-    /**
-     * The name of the MCP server, default is `vite`
-     */
-    serverName?: string
-  }
+  updateConfig?: 'auto' | false | MaybeArray<SupportedUpdateConfigType>
 
   /**
-   * Update the address of the MCP server in the VSCode config file `settings.json`,
-   * if VSCode config file exists.
+   * The name of the MCP server when updating the config files
    *
-   * @default true
+   * @default 'vite'
    */
-  updateVSCodeMcpJson?: boolean | {
-    enabled: boolean
-    /**
-     * The name of the MCP server, default is `vite`
-     */
-    serverName?: string
-  }
+  updateConfigServerName?: string
 
-  /**
-   * Update the address of the MCP server in the Windsurf config file `~/.codeium/windsurf/mcp_config.json`,
-   * if Windsurf config file exists.
-   *
-   * @default true
-   */
-  updateWindsurfMcpJson?: boolean | {
-    enabled: boolean
-    /**
-     * The name of the MCP server, default is `vite`
-     */
-    serverName?: string
-  }
+  // --------- DEPRECATED ---------
 
   /**
    * @deprecated Use `mcpRouteRoot` instead

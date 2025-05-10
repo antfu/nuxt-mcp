@@ -12,26 +12,11 @@ export * from './types'
 
 export function ViteMcp(options: ViteMcpOptions = {}): Plugin {
   const {
-    updateCursorMcpJson = true,
-    updateVSCodeMcpJson = true,
-    updateWindsurfMcpJson = true,
     printUrl = true,
     mcpServer = (vite: ViteDevServer) => import('./server').then(m => m.createMcpServerDefault(options, vite)),
   } = options
 
   const mcpRoute = options.mcpRouteRoot ?? options.mcpPath ?? '/__mcp'
-
-  const cursorMcpOptions = typeof updateCursorMcpJson == 'boolean'
-    ? { enabled: updateCursorMcpJson }
-    : updateCursorMcpJson
-
-  const vscodeMcpOptions = typeof updateVSCodeMcpJson == 'boolean'
-    ? { enabled: updateVSCodeMcpJson }
-    : updateVSCodeMcpJson
-
-  const windsurfMcpOptions = typeof updateWindsurfMcpJson === 'boolean'
-    ? { enabled: updateWindsurfMcpJson }
-    : updateWindsurfMcpJson
 
   return {
     name: 'vite-plugin-mcp',
@@ -46,50 +31,7 @@ export function ViteMcp(options: ViteMcpOptions = {}): Plugin {
       const protocol = vite.config.server.https ? 'https' : 'http'
       const sseUrl = `${protocol}://${options.host || 'localhost'}:${options.port || port}${mcpRoute}/sse`
 
-      if (cursorMcpOptions.enabled) {
-        if (existsSync(join(root, '.cursor'))) {
-          const mcp = existsSync(join(root, '.cursor/mcp.json'))
-            ? JSON.parse(await fs.readFile(join(root, '.cursor/mcp.json'), 'utf-8') || '{}')
-            : {}
-          mcp.mcpServers ||= {}
-          mcp.mcpServers[cursorMcpOptions.serverName || 'vite'] = { url: sseUrl }
-          await fs.writeFile(join(root, '.cursor/mcp.json'), `${JSON.stringify(mcp, null, 2)}\n`)
-        }
-      }
-
-      if (vscodeMcpOptions.enabled) {
-        const vscodeConfig = join(root, '.vscode/settings.json')
-        if (existsSync(vscodeConfig)) {
-          const mcp = existsSync(join(root, '.vscode/mcp.json'))
-            ? JSON.parse(await fs.readFile(join(root, '.vscode/mcp.json'), 'utf-8') || '{}')
-            : {}
-          mcp.servers ||= {}
-          mcp.servers[vscodeMcpOptions.serverName || 'vite'] = {
-            type: 'sse',
-            url: sseUrl,
-          }
-          await fs.writeFile(join(root, '.vscode/mcp.json'), `${JSON.stringify(mcp, null, 2)}\n`)
-        }
-      }
-
-      if (windsurfMcpOptions.enabled) {
-        const windsurfDir = join(homedir(), '.codeium', 'windsurf')
-        const windsurfConfigPath = join(windsurfDir, 'mcp_config.json')
-        try {
-          if (!existsSync(windsurfDir)) {
-            await fs.mkdir(windsurfDir, { recursive: true })
-          }
-          const config = existsSync(windsurfConfigPath)
-            ? JSON.parse(await fs.readFile(windsurfConfigPath, 'utf-8').catch(() => '{}') || '{}')
-            : {}
-          config.mcpServers ||= {}
-          config.mcpServers[windsurfMcpOptions.serverName || 'vite'] = { url: sseUrl }
-          await fs.writeFile(windsurfConfigPath, `${JSON.stringify(config, null, 2)}\n`)
-        }
-        catch (e) {
-          console.error(`${c.red.bold('  ➜  MCP (Windsurf): ')}Failed to update ${windsurfConfigPath}`, e)
-        }
-      }
+      await updateConfigs(root, sseUrl, options)
 
       if (printUrl) {
         setTimeout(() => {
@@ -98,5 +40,68 @@ export function ViteMcp(options: ViteMcpOptions = {}): Plugin {
         }, 300)
       }
     },
+  }
+}
+
+async function updateConfigs(root: string, sseUrl: string, options: ViteMcpOptions): Promise<void> {
+  const {
+    updateConfig = 'auto',
+    updateConfigServerName = 'vite',
+  } = options
+
+  if (updateConfig === false)
+    return
+
+  const configs = updateConfig === 'auto'
+    ? [
+        existsSync(join(root, '.cursor')) ? 'cursor' as const : null,
+        existsSync(join(root, '.vscode')) ? 'vscode' as const : null,
+        existsSync(join(homedir(), '.codeium', 'windsurf')) ? 'windsurf' as const : null,
+      ].filter(x => x !== null)
+    : Array.isArray(updateConfig)
+      ? updateConfig
+      : []
+
+  // Cursor
+  if (configs.includes('cursor')) {
+    await fs.mkdir(join(root, '.cursor'), { recursive: true })
+    const mcp = existsSync(join(root, '.cursor/mcp.json'))
+      ? JSON.parse(await fs.readFile(join(root, '.cursor/mcp.json'), 'utf-8') || '{}')
+      : {}
+    mcp.mcpServers ||= {}
+    mcp.mcpServers[updateConfigServerName || 'vite'] = { url: sseUrl }
+    await fs.writeFile(join(root, '.cursor/mcp.json'), `${JSON.stringify(mcp, null, 2)}\n`)
+  }
+
+  // VSCode
+  if (configs.includes('vscode')) {
+    await fs.mkdir(join(root, '.vscode'), { recursive: true })
+    const mcp = existsSync(join(root, '.vscode/mcp.json'))
+      ? JSON.parse(await fs.readFile(join(root, '.vscode/mcp.json'), 'utf-8') || '{}')
+      : {}
+    mcp.servers ||= {}
+    mcp.servers[updateConfigServerName || 'vite'] = {
+      type: 'sse',
+      url: sseUrl,
+    }
+    await fs.writeFile(join(root, '.vscode/mcp.json'), `${JSON.stringify(mcp, null, 2)}\n`)
+  }
+
+  // Windsurf
+  if (configs.includes('windsurf')) {
+    const windsurfDir = join(homedir(), '.codeium', 'windsurf')
+    const windsurfConfigPath = join(windsurfDir, 'mcp_config.json')
+    try {
+      await fs.mkdir(windsurfDir, { recursive: true })
+      const config = existsSync(windsurfConfigPath)
+        ? JSON.parse(await fs.readFile(windsurfConfigPath, 'utf-8').catch(() => '{}') || '{}')
+        : {}
+      config.mcpServers ||= {}
+      config.mcpServers[updateConfigServerName || 'vite'] = { url: sseUrl }
+      await fs.writeFile(windsurfConfigPath, `${JSON.stringify(config, null, 2)}\n`)
+    }
+    catch (e) {
+      console.error(`${c.red.bold('  ➜  MCP (Windsurf): ')}Failed to update ${windsurfConfigPath}`, e)
+    }
   }
 }
