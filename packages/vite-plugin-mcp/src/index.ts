@@ -10,6 +10,8 @@ import { setupRoutes } from './connect'
 
 export * from './types'
 
+const CONSOLE_LOG_PREFIX = c.cyan.bold`  ➜ MCP:      `
+
 export function ViteMcp(options: ViteMcpOptions = {}): Plugin {
   const {
     printUrl = true,
@@ -31,14 +33,11 @@ export function ViteMcp(options: ViteMcpOptions = {}): Plugin {
       const protocol = vite.config.server.https ? 'https' : 'http'
       const sseUrl = `${protocol}://${options.host || 'localhost'}:${options.port || port}${mcpRoute}/sse`
 
-      await updateConfigs(root, sseUrl, options)
-
       if (printUrl) {
-        setTimeout(() => {
-          // eslint-disable-next-line no-console
-          console.log(`${c.yellow.bold`  ➜  MCP:     `}Server is running at ${sseUrl}`)
-        }, 300)
+        // eslint-disable-next-line no-console
+        console.log(`${CONSOLE_LOG_PREFIX}${c.gray(`Mcp server is running at ${c.green(sseUrl)}`)}`)
       }
+      await updateConfigs(root, sseUrl, options)
     },
   }
 }
@@ -47,6 +46,7 @@ async function updateConfigs(root: string, sseUrl: string, options: ViteMcpOptio
   const {
     updateConfig = 'auto',
     updateConfigServerName = 'vite',
+    updateConfigAdditionalServers = [],
   } = options
 
   if (updateConfig === false)
@@ -70,7 +70,12 @@ async function updateConfigs(root: string, sseUrl: string, options: ViteMcpOptio
       : {}
     mcp.mcpServers ||= {}
     mcp.mcpServers[updateConfigServerName || 'vite'] = { url: sseUrl }
+    for (const server of updateConfigAdditionalServers) {
+      mcp.mcpServers[server.name] = { url: server.url }
+    }
     await fs.writeFile(join(root, '.cursor/mcp.json'), `${JSON.stringify(mcp, null, 2)}\n`)
+    // eslint-disable-next-line no-console
+    console.log(`${CONSOLE_LOG_PREFIX}${c.gray(`Updated config file ${join(root, '.cursor/mcp.json')}`)}`)
   }
 
   // VSCode
@@ -84,7 +89,15 @@ async function updateConfigs(root: string, sseUrl: string, options: ViteMcpOptio
       type: 'sse',
       url: sseUrl,
     }
+    for (const server of updateConfigAdditionalServers) {
+      mcp.servers[server.name] = {
+        type: 'sse',
+        url: server.url,
+      }
+    }
     await fs.writeFile(join(root, '.vscode/mcp.json'), `${JSON.stringify(mcp, null, 2)}\n`)
+    // eslint-disable-next-line no-console
+    console.log(`${CONSOLE_LOG_PREFIX}${c.gray(`Updated config file ${join(root, '.vscode/mcp.json')}`)}`)
   }
 
   // Windsurf
@@ -98,10 +111,15 @@ async function updateConfigs(root: string, sseUrl: string, options: ViteMcpOptio
         : {}
       config.mcpServers ||= {}
       config.mcpServers[updateConfigServerName || 'vite'] = { url: sseUrl }
+      for (const server of updateConfigAdditionalServers) {
+        config.mcpServers[server.name] = { url: server.url }
+      }
       await fs.writeFile(windsurfConfigPath, `${JSON.stringify(config, null, 2)}\n`)
+      // eslint-disable-next-line no-console
+      console.log(`${CONSOLE_LOG_PREFIX}${c.gray(`Updated config file ${windsurfConfigPath}`)}`)
     }
     catch (e) {
-      console.error(`${c.red.bold('  ➜  MCP (Windsurf): ')}Failed to update ${windsurfConfigPath}`, e)
+      console.error(`${CONSOLE_LOG_PREFIX}${c.red(`Failed to update ${windsurfConfigPath}`)}`, e)
     }
   }
 }
