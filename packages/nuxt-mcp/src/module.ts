@@ -45,7 +45,7 @@ export default defineNuxtModule<ModuleOptions>({
     })
 
     addVitePlugin(ViteMcp({
-      updateConfigServerName: 'nuxt-local',
+      updateConfigServerName: 'nuxt',
       ...options,
       updateConfigAdditionalServers: [
         ...options.updateConfigAdditionalServers || [],
