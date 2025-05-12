@@ -1,7 +1,7 @@
 {
   "name": "vite-plugin-mcp",
   "type": "module",
-  "version": "0.1.3",
+  "version": "0.2.0",
   "packageManager": "pnpm@10.10.0",
   "description": "MCP server helping models to understand your Vite app better.",
   "author": "Anthony Fu <anthonyfu117@hotmail.com>",
