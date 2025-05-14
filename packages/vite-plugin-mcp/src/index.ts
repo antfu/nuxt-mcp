@@ -110,9 +110,9 @@ async function updateConfigs(root: string, sseUrl: string, options: ViteMcpOptio
         ? JSON.parse(await fs.readFile(windsurfConfigPath, 'utf-8').catch(() => '{}') || '{}')
         : {}
       config.mcpServers ||= {}
-      config.mcpServers[updateConfigServerName || 'vite'] = { url: sseUrl }
+      config.mcpServers[updateConfigServerName || 'vite'] = { serverUrl: sseUrl }
       for (const server of updateConfigAdditionalServers) {
-        config.mcpServers[server.name] = { url: server.url }
+        config.mcpServers[server.name] = { serverUrl: server.url }
       }
       await fs.writeFile(windsurfConfigPath, `${JSON.stringify(config, null, 2)}\n`)
       // eslint-disable-next-line no-console
