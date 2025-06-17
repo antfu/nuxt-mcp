@@ -3,7 +3,7 @@ import type { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js'
 import type { Implementation as McpServerInfo } from '@modelcontextprotocol/sdk/types.js'
 import type { ViteDevServer } from 'vite'
 
-export type SupportedUpdateConfigType = 'cursor' | 'vscode' | 'windsurf'
+export type SupportedUpdateConfigType = 'cursor' | 'vscode' | 'windsurf' | 'claude-code'
 
 export interface UpdateConfigAdditionalServer {
   name: string
@@ -60,6 +60,7 @@ export interface ViteMcpOptions {
    * - `cursor` - Update the cursor config file `.cursor/mcp.json`
    * - `vscode` - Update the VSCode config file `.vscode/settings.json`
    * - `windsurf` - Update the Windsurf config file `~/.codeium/windsurf/mcp_config.json`
+   * - `claude-code` - Update the Claude Code config file `.mcp.json`
    *
    * @default 'auto'
    */
