@@ -62,6 +62,7 @@ async function updateConfigs(
         existsSync(join(root, '.cursor')) ? 'cursor' as const : null,
         existsSync(join(root, '.vscode')) ? 'vscode' as const : null,
         existsSync(join(homedir(), '.codeium', 'windsurf')) ? 'windsurf' as const : null,
+        existsSync(join(root, '.mcp.json')) ? 'claude-code' as const : null,
       ].filter(x => x !== null)
     : Array.isArray(updateConfig)
       ? updateConfig
@@ -123,5 +124,25 @@ async function updateConfigs(
     catch (e) {
       vite.config.logger.error(`${CONSOLE_LOG_PREFIX}${c.red(`Failed to update ${windsurfConfigPath}`)}${e}`)
     }
+  }
+
+  // Claude Code
+  if (configs.includes('claude-code')) {
+    const mcp = existsSync(join(root, '.mcp.json'))
+      ? JSON.parse(await fs.readFile(join(root, '.mcp.json'), 'utf-8') || '{}')
+      : {}
+    mcp.mcpServers ||= {}
+    mcp.mcpServers[updateConfigServerName || 'vite'] = {
+      type: 'sse',
+      url: sseUrl,
+    }
+    for (const server of updateConfigAdditionalServers) {
+      mcp.mcpServers[server.name] = {
+        type: 'sse',
+        url: server.url,
+      }
+    }
+    await fs.writeFile(join(root, '.mcp.json'), `${JSON.stringify(mcp, null, 2)}\n`)
+    vite.config.logger.info(`${CONSOLE_LOG_PREFIX}${c.gray(`Updated config file ${join(root, '.mcp.json')}`)}`)
   }
 }

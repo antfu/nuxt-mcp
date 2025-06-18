@@ -21,7 +21,7 @@ export default defineNuxtConfig({
 
 Then the MCP server will be available at `http://localhost:3000/__mcp/sse`.
 
-> 💡 When using VSCode, Cursor, Windsurf, the module will automatically update the config files for you.
+> 💡 When using VSCode, Cursor, Windsurf, Claude Code, the module will automatically update the config files for you.
 
 ## Module Hooks
 

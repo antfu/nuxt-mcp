@@ -24,7 +24,7 @@ export default defineConfig({
 
 Then the MCP server will be available at `http://localhost:5173/__mcp/sse`.
 
-> 💡 When using VSCode, Cursor, Windsurf, the module will automatically update the config files for you.
+> 💡 When using VSCode, Cursor, Windsurf, Claude Code, the module will automatically update the config files for you.
 >
 > You can configure that in the options with `updateConfig` and `updateConfigServerName`.
 
