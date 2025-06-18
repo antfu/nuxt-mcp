@@ -23,6 +23,7 @@ export function ViteMcp(options: ViteMcpOptions = {}): Plugin {
   return {
     name: 'vite-plugin-mcp',
     async configureServer(vite) {
+      vite.config.server.port = options.port || vite.config.server.port
       let mcp = await mcpServer(vite)
       mcp = await options.mcpServerSetup?.(mcp, vite) || mcp
       await setupRoutes(mcpRoute, mcp, vite)
@@ -31,7 +32,7 @@ export function ViteMcp(options: ViteMcpOptions = {}): Plugin {
       const root = searchForWorkspaceRoot(vite.config.root)
 
       const protocol = vite.config.server.https ? 'https' : 'http'
-      const sseUrl = `${protocol}://${options.host || 'localhost'}:${options.port || port}${mcpRoute}/sse`
+      const sseUrl = `${protocol}://${options.host || 'localhost'}:${port}${mcpRoute}/sse`
 
       if (printUrl) {
         // eslint-disable-next-line no-console
