@@ -56,7 +56,7 @@ export default defineNuxtModule<ModuleOptions>({
               }]
             : []),
       ],
-      port: nuxt.options.devServer.port,
+      port: options.port || nuxt.options.devServer.port,
       async mcpServerSetup(mcp, vite) {
         await options.mcpServerSetup?.(mcp, vite)
 
