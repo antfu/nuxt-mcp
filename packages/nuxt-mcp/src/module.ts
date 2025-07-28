@@ -92,6 +92,7 @@ declare module 'nuxt/schema' {
   interface NuxtHooks {
     'mcp:setup': (ctx: McpToolContext) => void | Promise<void>
   }
+  
 }
 
 declare module '@nuxt/schema' {
