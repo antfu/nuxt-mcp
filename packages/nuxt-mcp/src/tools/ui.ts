@@ -101,7 +101,7 @@ export function toolsNuxtUI({ mcp, nuxt, modules }: McpToolContext): void {
   )
 }
 
-async function getUIComponents(nuxt: any): Promise<Array<{ 
+async function getUIComponents(_nuxt: any): Promise<Array<{ 
   name: string, 
   props: Record<string, any>, 
   description: string,
@@ -279,7 +279,7 @@ function onSubmit() {
   ]
 }
 
-async function getUITheme(nuxt: any): Promise<NuxtUITheme> {
+async function getUITheme(_nuxt: any): Promise<NuxtUITheme> {
   return {
     colors: {
       primary: {
@@ -372,27 +372,11 @@ async function getUITheme(nuxt: any): Promise<NuxtUITheme> {
         lg: '1.125rem',
         xl: '1.25rem'
       }
-    },
-    customization: {
-      info: 'Use app.config.ts to customize theme colors and component styles',
-      example: `// app.config.ts
-export default defineAppConfig({
-  ui: {
-    primary: 'emerald',
-    gray: 'zinc',
-    button: {
-      rounded: 'rounded-full',
-      default: {
-        size: 'lg'
-      }
-    }
-  }
-})`
     }
   }
 }
 
-async function getUIColors(nuxt: any): Promise<Record<string, any>> {
+async function getUIColors(_nuxt: any): Promise<Record<string, any>> {
   return {
     availableColors: {
       red: { description: 'Error states, destructive actions', usage: 'Buttons, alerts, form errors' },

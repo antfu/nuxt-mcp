@@ -309,6 +309,76 @@ npm run test:integration
 
 ## 📖 Examples
 
+### Using MCP with Claude Code
+
+Once your Nuxt app with `nuxt-mcp` is running, you can interact with Claude Code using the MCP tools. Here are example prompts:
+
+#### **🎨 UI/UX Design Examples**
+
+```
+I need to create a landing page for my SaaS product that converts visitors into trial users. 
+The product helps teams manage their projects more efficiently. Can you help me design 
+an optimized structure?
+
+→ MCP will use generate-landing-page-structure tool with conversion best practices
+```
+
+```
+Please audit my dashboard interface for accessibility compliance. I have a complex 
+data table with filters and sorting. What WCAG issues should I address?
+
+→ MCP will use audit-accessibility-wcag to identify and fix compliance issues
+```
+
+#### **🏗️ Fullstack Development Examples**
+
+```
+I want to add user authentication to my Nuxt app with GitHub and Google OAuth. 
+Can you scaffold the complete auth flow including protected pages?
+
+→ MCP will detect nuxt-auth-utils and generate complete auth implementation
+```
+
+```
+Help me create a user management system with a database. I need CRUD operations 
+for users with roles and permissions, plus API endpoints.
+
+→ MCP will use Drizzle ORM tools to create schema, queries, and API routes
+```
+
+#### **🎯 Design System Examples**
+
+```
+I need to create a consistent design system for my application. It should feel 
+professional and trustworthy for a fintech product. Include color palette, 
+typography, and component patterns.
+
+→ MCP will use create-design-system tool with fintech-appropriate styling
+```
+
+```
+My current interface has inconsistent spacing and colors. Can you audit the design 
+and provide standardization recommendations?
+
+→ MCP will use audit-design-consistency to identify and fix inconsistencies
+```
+
+#### **🔧 Development Workflow Examples**
+
+```
+Show me how to set up a complete e-commerce product page with Nuxt UI components, 
+proper SEO structure, and accessibility compliance.
+
+→ MCP will combine UI scaffolding, SEO optimization, and accessibility tools
+```
+
+```
+I'm building a dashboard for project management. Help me choose the optimal layout 
+and information architecture for team leads who need to track multiple projects.
+
+→ MCP will use design-dashboard-layout with role-based UX patterns
+```
+
 ### Complete Feature Development
 
 ```typescript
@@ -329,6 +399,24 @@ npm run test:integration
 
 // 6. Optimize for conversion
 // Use: generate-landing-page-structure for marketing pages
+```
+
+### Expert Prompts Usage
+
+Access specialized expertise through expert prompts:
+
+```
+Using the design-expert prompt:
+"I'm designing a mobile-first e-commerce checkout flow. What are the key UX 
+principles I should follow to minimize cart abandonment?"
+
+Using the accessibility-expert prompt:
+"My data visualization dashboard uses color-coding extensively. How can I make 
+it accessible for colorblind users while maintaining usability?"
+
+Using the landing-page-expert prompt:
+"I have a B2B SaaS tool with a 2% conversion rate. Analyze my landing page 
+structure and suggest improvements based on conversion psychology."
 ```
 
 ## 📚 Documentation

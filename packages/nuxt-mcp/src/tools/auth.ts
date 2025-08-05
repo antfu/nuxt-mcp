@@ -153,143 +153,33 @@ export function toolsNuxtAuth({ mcp, nuxt, modules }: McpToolContext): void {
   )
 }
 
-async function getAuthConfiguration(nuxt: any): Promise<AuthConfig> {
+async function getAuthConfiguration(_nuxt: any): Promise<AuthConfig> {
   return {
-    module: {
-      name: 'nuxt-auth-utils',
-      version: 'Latest',
-      documentation: 'https://nuxt.com/modules/auth-utils',
-      repository: 'https://github.com/atinux/nuxt-auth-utils'
-    },
-    installation: {
-      command: 'npx nuxi@latest module add auth-utils',
-      requirements: [
-        'Nuxt >=3.0.0',
-        'Server-side rendering (not compatible with nuxt generate)',
-        'NUXT_SESSION_PASSWORD environment variable (32+ characters)'
-      ]
-    },
-    providers: {
-      available: [
-        'Auth0', 'AWS Cognito', 'Azure', 'Battledotnet', 'Discord', 'Facebook',
-        'GitHub', 'GitLab', 'Google', 'Instagram', 'Keycloak', 'LinkedIn',
-        'Microsoft', 'Okta', 'Paypal', 'Spotify', 'Steam', 'Stripe', 'Twitch',
-        'Twitter', 'Vk', 'WorkOS', 'Yandex', 'Zoom'
-      ],
-      oauth: {
-        pattern: 'defineOAuth<Provider>EventHandler({ onSuccess, config?, onError? })',
-        example: `// server/api/auth/google.get.ts
-export default defineOAuthGoogleEventHandler({
-  config: {
-    scope: ['openid', 'email', 'profile']
-  },
-  async onSuccess(event, { user }) {
-    await setUserSession(event, {
-      user: {
-        id: user.sub,
-        email: user.email,
-        name: user.name,
-        avatar: user.picture
-      }
-    })
-    return sendRedirect(event, '/')
-  }
-})`
-      }
-    },
+    providers: [
+      'Auth0', 'AWS Cognito', 'Azure', 'Battledotnet', 'Discord', 'Facebook',
+      'GitHub', 'GitLab', 'Google', 'Instagram', 'Keycloak', 'LinkedIn',
+      'Microsoft', 'Okta', 'Paypal', 'Spotify', 'Steam', 'Stripe', 'Twitch',
+      'Twitter', 'Vk', 'WorkOS', 'Yandex', 'Zoom'
+    ],
     session: {
-      description: 'Secured & sealed cookies using iron for session storage',
-      environment: {
-        NUXT_SESSION_PASSWORD: {
-          required: true,
-          minLength: 32,
-          description: 'Secret key for encrypting session cookies'
-        }
-      },
-      cookieOptions: {
+      name: 'nuxt-session',
+      password: globalThis.process?.env.NUXT_SESSION_PASSWORD || '',
+      cookie: {
         httpOnly: true,
         secure: true,
         sameSite: 'lax',
         maxAge: 60 * 60 * 24 * 7 // 7 days
-      },
-      sizeLimit: '4096 bytes (store only essential information)'
-    },
-    composables: {
-      useUserSession: {
-        description: 'Client-side session management',
-        properties: {
-          loggedIn: 'Computed<boolean> - User authentication status',
-          user: 'ComputedRef<User | null> - Current user data',
-          session: 'Ref<UserSession> - Full session object',
-          clear: '() => Promise<void> - Clear session and logout',
-          fetch: '() => Promise<void> - Refresh session from server',
-          openInPopup: '(route: string, size?) => void - OAuth in popup'
-        },
-        example: `<script setup>
-const { loggedIn, user, clear } = useUserSession()
-
-async function logout() {
-  await clear()
-  await navigateTo('/login')
-}
-</script>
-
-<template>
-  <div v-if="loggedIn">
-    <p>Welcome {{ user.name }}!</p>
-    <button @click="logout">Logout</button>
-  </div>
-</template>`
       }
     },
-    serverUtils: {
-      getUserSession: {
-        description: 'Get current user session',
-        usage: 'const session = await getUserSession(event)',
-        returns: 'UserSession | null'
-      },
-      setUserSession: {
-        description: 'Set user session data',
-        usage: 'await setUserSession(event, { user: userData })',
-        parameters: 'event: H3Event, session: UserSession'
-      },
-      clearUserSession: {
-        description: 'Clear user session',
-        usage: 'await clearUserSession(event)'
-      },
-      requireUserSession: {
-        description: 'Require authenticated session (throws 401 if not)',
-        usage: 'const session = await requireUserSession(event)',
-        returns: 'UserSession (or throws error)'
-      },
-      replaceUserSession: {
-        description: 'Replace entire session',
-        usage: 'await replaceUserSession(event, newSession)'
-      }
-    },
-    features: {
-      passwordHashing: {
-        available: true,
-        description: 'Built-in password hashing utilities',
-        functions: ['hashPassword', 'verifyPassword']
-      },
-      webauthn: {
-        available: true,
-        description: 'WebAuthn (passkey) authentication support'
-      },
-      oauth: {
-        providers: '40+ OAuth providers supported',
-        customization: 'Easy to add custom OAuth providers'
-      },
-      ssr: {
-        compatible: true,
-        note: 'Full server-side rendering support'
-      }
+    pages: {
+      login: '/auth/login',
+      register: '/auth/register',
+      error: '/auth/error'
     }
   }
 }
 
-async function getSessionInfo(nuxt: any): Promise<any> {
+async function getSessionInfo(_nuxt: any): Promise<any> {
   return {
     structure: {
       user: {
@@ -391,7 +281,7 @@ export default defineEventHandler(async (event) => {
   }
 }
 
-async function getAuthProviders(nuxt: any): Promise<any> {
+async function getAuthProviders(_nuxt: any): Promise<any> {
   return {
     popular: {
       github: {

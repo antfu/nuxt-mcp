@@ -160,100 +160,8 @@ export function toolsDatabase({ mcp, nuxt, modules }: McpToolContext): void {
   )
 }
 
-async function getDatabaseSchema(nuxt: any): Promise<DatabaseSchema> {
+async function getDatabaseSchema(_nuxt: any): Promise<DatabaseSchema> {
   return {
-    overview: {
-      description: 'Drizzle ORM schema declaration patterns',
-      documentation: 'https://orm.drizzle.team/docs/sql-schema-declaration',
-      organization: {
-        singleFile: 'All schemas in schema.ts',
-        multiFile: 'Schemas spread across multiple files in schema/ folder',
-        requirement: 'All models must be exported for Drizzle-Kit migrations'
-      }
-    },
-    columnTypes: {
-      sqlite: {
-        integer: { usage: 'integer("id")', description: 'Integer numbers' },
-        text: { usage: 'text("name")', description: 'Text strings' },
-        real: { usage: 'real("price")', description: 'Floating point numbers' },
-        blob: { usage: 'blob("data")', description: 'Binary data' },
-        numeric: { usage: 'numeric("amount")', description: 'Precise decimal numbers' }
-      },
-      postgresql: {
-        integer: { usage: 'integer("id")', description: 'Integer (32-bit)' },
-        bigint: { usage: 'bigint("id", { mode: "number" })', description: 'Big integer (64-bit)' },
-        varchar: { usage: 'varchar("name", { length: 255 })', description: 'Variable character string' },
-        text: { usage: 'text("description")', description: 'Unlimited text' },
-        boolean: { usage: 'boolean("active")', description: 'True/false values' },
-        timestamp: { usage: 'timestamp("created_at", { withTimezone: true })', description: 'Date and time' },
-        json: { usage: 'json("metadata")', description: 'JSON data' },
-        uuid: { usage: 'uuid("id")', description: 'UUID type' }
-      }
-    },
-    examples: {
-      basicTable: {
-        title: 'Basic Table Definition',
-        code: `import { pgTable, integer, varchar, timestamp } from 'drizzle-orm/pg-core'
-
-export const users = pgTable('users', {
-  id: integer('id').primaryKey().generatedAlwaysAsIdentity(),
-  name: varchar('name', { length: 255 }).notNull(),
-  email: varchar('email', { length: 255 }).notNull().unique(),
-  createdAt: timestamp('created_at').defaultNow().notNull(),
-  updatedAt: timestamp('updated_at').defaultNow().notNull()
-})`
-      },
-      withRelations: {
-        title: 'Table with Relations',
-        code: `import { pgTable, integer, varchar, text, boolean, timestamp } from 'drizzle-orm/pg-core'
-import { relations } from 'drizzle-orm'
-
-export const users = pgTable('users', {
-  id: integer('id').primaryKey().generatedAlwaysAsIdentity(),
-  name: varchar('name', { length: 255 }).notNull(),
-  email: varchar('email', { length: 255 }).notNull().unique()
-})
-
-export const posts = pgTable('posts', {
-  id: integer('id').primaryKey().generatedAlwaysAsIdentity(),
-  title: varchar('title', { length: 255 }).notNull(),
-  content: text('content'),
-  published: boolean('published').default(false),
-  authorId: integer('author_id').references(() => users.id),
-  createdAt: timestamp('created_at').defaultNow()
-})
-
-export const usersRelations = relations(users, ({ many }) => ({
-  posts: many(posts)
-}))
-
-export const postsRelations = relations(posts, ({ one }) => ({
-  author: one(users, {
-    fields: [posts.authorId],
-    references: [users.id]
-  })
-}))`
-      },
-      enums: {
-        title: 'Using Enums',
-        code: `import { pgTable, pgEnum, integer, varchar } from 'drizzle-orm/pg-core'
-
-export const roleEnum = pgEnum('role', ['admin', 'user', 'guest'])
-
-export const users = pgTable('users', {
-  id: integer('id').primaryKey(),
-  name: varchar('name', { length: 255 }),
-  role: roleEnum('role').default('guest')
-})`
-      }
-    },
-    constraints: {
-      primaryKey: { usage: '.primaryKey()', description: 'Mark column as primary key' },
-      notNull: { usage: '.notNull()', description: 'Column cannot be null' },
-      unique: { usage: '.unique()', description: 'Column must have unique values' },
-      default: { usage: '.default(value)', description: 'Set default value' },
-      references: { usage: '.references(() => otherTable.id)', description: 'Foreign key reference' }
-    },
     tables: [
       {
         name: 'users',
@@ -280,14 +188,14 @@ export const users = pgTable('users', {
           { name: 'created_at', type: 'timestamp', nullable: false, primaryKey: false },
         ],
         relations: [
-          { type: 'many-to-one', table: 'users', column: 'author_id' },
+          { type: 'many-to-many', table: 'users', column: 'author_id' },
         ],
       },
     ],
   }
 }
 
-async function getDatabaseTables(nuxt: any): Promise<Array<{ name: string, columns: number, hasRelations: boolean }>> {
+async function getDatabaseTables(_nuxt: any): Promise<Array<{ name: string, columns: number, hasRelations: boolean }>> {
   return [
     { name: 'users', columns: 6, hasRelations: true },
     { name: 'posts', columns: 6, hasRelations: true },
@@ -298,8 +206,8 @@ async function getDatabaseTables(nuxt: any): Promise<Array<{ name: string, colum
 function generateDrizzleQuery({
   operation,
   table,
-  conditions,
-  relations,
+  conditions: _conditions,
+  relations: _relations,
 }: {
   operation: string
   table: string
@@ -763,10 +671,10 @@ DROP TABLE "${tableName}";`,
   }
 }
 
-async function getDatabaseConnection(nuxt: any): Promise<any> {
+async function getDatabaseConnection(_nuxt: any): Promise<any> {
   return {
     driver: 'sqlite', // or 'postgresql', 'mysql'
-    url: process.env.DATABASE_URL || 'file:./database.db',
+    url: globalThis.process?.env.DATABASE_URL || 'file:./database.db',
     connected: true,
     migrations: {
       folder: './drizzle',

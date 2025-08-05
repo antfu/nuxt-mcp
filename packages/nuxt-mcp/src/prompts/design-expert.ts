@@ -3,11 +3,8 @@ import type { McpToolContext } from '../types'
 export function promptDesignExpert({ mcp, modules }: McpToolContext): void {
   if (!modules.hasUIUXNeeds) return
 
-  mcp.prompt(
-    'design-expert',
-    'You are an expert UI/UX designer with deep knowledge of modern design principles, user psychology, and conversion optimization. You specialize in creating user-centered designs that are both aesthetically pleasing and highly functional.',
-    ({ messages }) => {
-      const systemPrompt = `# UI/UX Design Expert
+  mcp.prompt('design-expert', () => {
+    const systemPrompt = `# UI/UX Design Expert
 
 You are a senior UI/UX designer with 10+ years of experience in digital product design. Your expertise spans:
 
@@ -196,21 +193,21 @@ You are a senior UI/UX designer with 10+ years of experience in digital product 
 
 Always consider the user's context, goals, and limitations when making design decisions. Good design is invisible - it solves problems without drawing attention to itself.`
 
-      return [
+    return {
+      messages: [
         {
-          role: 'system',
-          content: systemPrompt
+          role: 'user',
+          content: {
+            type: 'text',
+            text: systemPrompt,
+          },
         },
-        ...messages
-      ]
+      ],
     }
-  )
+  })
 
-  mcp.prompt(
-    'landing-page-expert',
-    'You are a conversion optimization expert specializing in high-converting landing pages. You understand the psychology of persuasion and know how to structure pages for maximum conversion rates.',
-    ({ messages }) => {
-      const systemPrompt = `# Landing Page Conversion Expert
+  mcp.prompt('landing-page-expert', () => {
+    const systemPrompt = `# Landing Page Conversion Expert
 
 You are a specialist in creating high-converting landing pages with proven track records of improving conversion rates by 200-500%. Your expertise includes:
 
@@ -425,21 +422,21 @@ You are a specialist in creating high-converting landing pages with proven track
 
 Always test your hypotheses with real users and data. What works for one audience might not work for another.`
 
-      return [
+    return {
+      messages: [
         {
-          role: 'system',
-          content: systemPrompt
+          role: 'user',
+          content: {
+            type: 'text',
+            text: systemPrompt,
+          },
         },
-        ...messages
-      ]
+      ],
     }
-  )
+  })
 
-  mcp.prompt(
-    'dashboard-ux-expert',
-    'You are a dashboard UX specialist with expertise in creating intuitive, productive interfaces for complex data and workflows. You understand information architecture and user mental models.',
-    ({ messages }) => {
-      const systemPrompt = `# Dashboard UX Expert
+  mcp.prompt('dashboard-ux-expert', () => {
+    const systemPrompt = `# Dashboard UX Expert
 
 You are a specialist in designing dashboards and admin interfaces that enable users to efficiently manage complex information and workflows. Your expertise includes:
 
@@ -673,13 +670,16 @@ You are a specialist in designing dashboards and admin interfaces that enable us
 
 Remember: Great dashboards make complex information feel simple and actionable. Focus on user goals, not just data display.`
 
-      return [
+    return {
+      messages: [
         {
-          role: 'system',
-          content: systemPrompt
+          role: 'user',
+          content: {
+            type: 'text',
+            text: systemPrompt,
+          },
         },
-        ...messages
-      ]
+      ],
     }
-  )
+  })
 }

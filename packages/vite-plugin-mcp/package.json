@@ -41,13 +41,13 @@
     "vite": ">=6.0.0"
   },
   "dependencies": {
-    "@modelcontextprotocol/sdk": "catalog:prod",
-    "ansis": "catalog:prod",
-    "debug": "catalog:prod",
-    "pathe": "catalog:prod",
-    "zod": "catalog:prod"
+    "@modelcontextprotocol/sdk": "^1.17.1",
+    "ansis": "^4.1.0",
+    "debug": "^4.4.1",
+    "pathe": "^2.0.3",
+    "zod": "^3.25.76"
   },
   "devDependencies": {
-    "@types/debug": "catalog:types"
+    "@types/debug": "^4.1.12"
   }
 }
