@@ -171,25 +171,29 @@ Full type safety across the stack:
 
 ```typescript
 // Database schema types flow to API responses
-const users = await useDrizzleQuery('users', { 
+const users = await useDrizzleQuery('users', {
   where: { active: true }
 })
+```
 
-// Component props are fully typed
-<UButton 
-  variant="primary" 
-  size="lg" 
-  :loading="isSubmitting"
->
-  Submit Form
-</UButton>
+```vue
+<!-- Component props are fully typed -->
+<template>
+  <UButton
+    variant="primary"
+    size="lg"
+    :loading="isSubmitting"
+  >
+    Submit Form
+  </UButton>
+</template>
 ```
 
 ### MCP Context Sharing
 
 The MCP server provides real-time context about:
 
-- Application configuration and runtime state  
+- Application configuration and runtime state
 - Installed modules and available features
 - Database schema and relationships
 - UI component library and theme tokens
@@ -251,19 +255,19 @@ export default defineNuxtConfig({
   mcp: {
     // MCP server port (defaults to Nuxt dev server port)
     port: 3000,
-    
+
     // Include official Nuxt docs MCP
     includeNuxtDocsMcp: true,
-    
+
     // Custom MCP server setup
     mcpServerSetup: async (mcp, vite) => {
       // Add custom tools
       mcp.tool('my-custom-tool', 'Description', schema, handler)
-      
-      // Add custom prompts  
+
+      // Add custom prompts
       mcp.prompt('my-expert', 'Custom expertise', promptHandler)
     },
-    
+
     // Additional MCP servers
     updateConfigAdditionalServers: [
       {
@@ -316,15 +320,15 @@ Once your Nuxt app with `nuxt-mcp` is running, you can interact with Claude Code
 #### **🎨 UI/UX Design Examples**
 
 ```
-I need to create a landing page for my SaaS product that converts visitors into trial users. 
-The product helps teams manage their projects more efficiently. Can you help me design 
+I need to create a landing page for my SaaS product that converts visitors into trial users.
+The product helps teams manage their projects more efficiently. Can you help me design
 an optimized structure?
 
 → MCP will use generate-landing-page-structure tool with conversion best practices
 ```
 
 ```
-Please audit my dashboard interface for accessibility compliance. I have a complex 
+Please audit my dashboard interface for accessibility compliance. I have a complex
 data table with filters and sorting. What WCAG issues should I address?
 
 → MCP will use audit-accessibility-wcag to identify and fix compliance issues
@@ -333,14 +337,14 @@ data table with filters and sorting. What WCAG issues should I address?
 #### **🏗️ Fullstack Development Examples**
 
 ```
-I want to add user authentication to my Nuxt app with GitHub and Google OAuth. 
+I want to add user authentication to my Nuxt app with GitHub and Google OAuth.
 Can you scaffold the complete auth flow including protected pages?
 
 → MCP will detect nuxt-auth-utils and generate complete auth implementation
 ```
 
 ```
-Help me create a user management system with a database. I need CRUD operations 
+Help me create a user management system with a database. I need CRUD operations
 for users with roles and permissions, plus API endpoints.
 
 → MCP will use Drizzle ORM tools to create schema, queries, and API routes
@@ -349,15 +353,15 @@ for users with roles and permissions, plus API endpoints.
 #### **🎯 Design System Examples**
 
 ```
-I need to create a consistent design system for my application. It should feel 
-professional and trustworthy for a fintech product. Include color palette, 
+I need to create a consistent design system for my application. It should feel
+professional and trustworthy for a fintech product. Include color palette,
 typography, and component patterns.
 
 → MCP will use create-design-system tool with fintech-appropriate styling
 ```
 
 ```
-My current interface has inconsistent spacing and colors. Can you audit the design 
+My current interface has inconsistent spacing and colors. Can you audit the design
 and provide standardization recommendations?
 
 → MCP will use audit-design-consistency to identify and fix inconsistencies
@@ -366,14 +370,14 @@ and provide standardization recommendations?
 #### **🔧 Development Workflow Examples**
 
 ```
-Show me how to set up a complete e-commerce product page with Nuxt UI components, 
+Show me how to set up a complete e-commerce product page with Nuxt UI components,
 proper SEO structure, and accessibility compliance.
 
 → MCP will combine UI scaffolding, SEO optimization, and accessibility tools
 ```
 
 ```
-I'm building a dashboard for project management. Help me choose the optimal layout 
+I'm building a dashboard for project management. Help me choose the optimal layout
 and information architecture for team leads who need to track multiple projects.
 
 → MCP will use design-dashboard-layout with role-based UX patterns
@@ -407,15 +411,15 @@ Access specialized expertise through expert prompts:
 
 ```
 Using the design-expert prompt:
-"I'm designing a mobile-first e-commerce checkout flow. What are the key UX 
+"I'm designing a mobile-first e-commerce checkout flow. What are the key UX
 principles I should follow to minimize cart abandonment?"
 
 Using the accessibility-expert prompt:
-"My data visualization dashboard uses color-coding extensively. How can I make 
+"My data visualization dashboard uses color-coding extensively. How can I make
 it accessible for colorblind users while maintaining usability?"
 
 Using the landing-page-expert prompt:
-"I have a B2B SaaS tool with a 2% conversion rate. Analyze my landing page 
+"I have a B2B SaaS tool with a 2% conversion rate. Analyze my landing page
 structure and suggest improvements based on conversion psychology."
 ```
 
@@ -443,7 +447,7 @@ This project is built upon the excellent foundation of [Anthony Fu's nuxt-mcp](h
 <!-- Badges -->
 [npm-version-src]: https://img.shields.io/npm/v/nuxt-mcp?style=flat&colorA=080f12&colorB=1fa669
 [npm-version-href]: https://npmjs.com/package/nuxt-mcp
-[npm-downloads-src]: https://img.shields.io/npm/dm/nuxt-mcp?style=flat&colorA=080f12&colorB=1fa669  
+[npm-downloads-src]: https://img.shields.io/npm/dm/nuxt-mcp?style=flat&colorA=080f12&colorB=1fa669
 [npm-downloads-href]: https://npmjs.com/package/nuxt-mcp
 [bundle-src]: https://img.shields.io/bundlephobia/minzip/nuxt-mcp?style=flat&colorA=080f12&colorB=1fa669&label=minzip
 [bundle-href]: https://bundlephobia.com/result?p=nuxt-mcp
