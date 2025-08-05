@@ -42,16 +42,16 @@ jobs:
         run: pnpm install --no-frozen-lockfile
 
       - name: Run linter
-        run: pnpm lint
+        run: pnpm run lint
 
       - name: Run type check
-        run: pnpm typecheck
+        run: pnpm run typecheck
 
       - name: Run tests
-        run: pnpm test
+        run: pnpm run test
 
       - name: Run integration tests
-        run: pnpm test:integration
+        run: pnpm run test:integration
 
   npm-publish:
     needs: test
@@ -78,7 +78,7 @@ jobs:
         run: pnpm install --no-frozen-lockfile
 
       - name: Build packages
-        run: pnpm build
+        run: pnpm run build
 
       - name: Publish to NPM
         run: pnpm publish --no-git-checks -r --access public

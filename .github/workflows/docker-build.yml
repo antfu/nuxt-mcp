@@ -35,16 +35,16 @@ jobs:
         run: pnpm install --no-frozen-lockfile
 
       - name: Run linter
-        run: pnpm lint
+        run: pnpm run lint
 
       - name: Run type check
-        run: pnpm typecheck
+        run: pnpm run typecheck
 
       - name: Run tests
-        run: pnpm test
+        run: pnpm run test
 
       - name: Run integration tests
-        run: pnpm test:integration
+        run: pnpm run test:integration
 
       - name: Check deployment conditions
         id: check

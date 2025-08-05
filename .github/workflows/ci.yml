@@ -23,8 +23,8 @@ jobs:
           cache: pnpm
 
       - run: pnpm install --no-frozen-lockfile
-      - run: nr lint
-      - run: nr typecheck
+      - run: pnpm run lint
+      - run: pnpm run typecheck
 
   test:
     runs-on: ${{ matrix.os }}
@@ -47,5 +47,5 @@ jobs:
           cache: pnpm
 
       - run: pnpm install --no-frozen-lockfile
-      - run: nr build
-      - run: nr test
+      - run: pnpm run build
+      - run: pnpm run test
