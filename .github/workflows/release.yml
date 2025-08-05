@@ -29,14 +29,17 @@ jobs:
 
       - name: Setup pnpm
         uses: pnpm/action-setup@v4
+        with:
+          version: 10.14.0
 
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
           node-version: lts/*
+          cache: pnpm
 
       - name: Install dependencies
-        run: pnpm install --frozen-lockfile
+        run: pnpm install --no-frozen-lockfile
 
       - name: Run linter
         run: pnpm lint
@@ -61,15 +64,18 @@ jobs:
 
       - name: Setup pnpm
         uses: pnpm/action-setup@v4
+        with:
+          version: 10.14.0
 
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
           node-version: lts/*
           registry-url: https://registry.npmjs.org/
+          cache: pnpm
 
       - name: Install dependencies
-        run: pnpm install --frozen-lockfile
+        run: pnpm install --no-frozen-lockfile
 
       - name: Build packages
         run: pnpm build
@@ -134,6 +140,8 @@ jobs:
 
       - name: Setup pnpm
         uses: pnpm/action-setup@v4
+        with:
+          version: 10.14.0
 
       - name: Generate changelog and create release
         run: pnpm dlx changelogithub
@@ -147,7 +155,7 @@ jobs:
           # Get the latest release
           RELEASE_ID=$(gh api repos/${{ github.repository }}/releases/latest --jq '.id')
           RELEASE_BODY=$(gh api repos/${{ github.repository }}/releases/latest --jq '.body')
-          
+
           # Append Docker information
           NEW_BODY="$RELEASE_BODY
 
@@ -190,7 +198,7 @@ jobs:
              \`\`\`
 
           3. **Access MCP Server**: http://localhost:3000/__mcp/sse"
-          
+
           # Update the release
           gh api repos/${{ github.repository }}/releases/$RELEASE_ID \
             --method PATCH \
