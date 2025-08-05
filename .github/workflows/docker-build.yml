@@ -22,14 +22,17 @@ jobs:
 
       - name: Setup pnpm
         uses: pnpm/action-setup@v4
+        with:
+          version: 10.14.0
 
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
           node-version: lts/*
+          cache: pnpm
 
       - name: Install dependencies
-        run: pnpm install --frozen-lockfile
+        run: pnpm install --no-frozen-lockfile
 
       - name: Run linter
         run: pnpm lint
@@ -130,24 +133,24 @@ jobs:
             IMAGE_TAG="${{ env.IMAGE_NAME }}:test"
             echo "Testing local image: $IMAGE_TAG"
           fi
-          
+
           # Start the container
           CONTAINER_ID=$(docker run -d -p 3000:3000 "$IMAGE_TAG")
           echo "Started container: $CONTAINER_ID"
-          
+
           # Wait for the container to start
           echo "Waiting for container to start..."
           sleep 30
-          
+
           # Check if the container is running
           if ! docker ps | grep "$CONTAINER_ID"; then
             echo "❌ Container failed to start"
             docker logs "$CONTAINER_ID"
             exit 1
           fi
-          
+
           echo "✅ Container is running"
-          
+
           # Test health check endpoint (if available)
           echo "Testing application endpoints..."
           if curl -f http://localhost:3000/__mcp/health >/dev/null 2>&1; then
@@ -158,7 +161,7 @@ jobs:
             echo "⚠️ No endpoints responding (this might be expected for development)"
             docker logs "$CONTAINER_ID" | tail -20
           fi
-          
+
           # Cleanup
           docker stop "$CONTAINER_ID" >/dev/null 2>&1 || true
           docker rm "$CONTAINER_ID" >/dev/null 2>&1 || true
