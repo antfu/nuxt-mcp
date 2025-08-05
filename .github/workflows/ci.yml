@@ -16,14 +16,13 @@ jobs:
       - uses: actions/checkout@v4
       - uses: pnpm/action-setup@v4
         with:
-          run_install: false
+          version: 10.14.0
       - uses: actions/setup-node@v4
         with:
           node-version: lts/*
           cache: pnpm
 
-      - run: pnpm i -g @antfu/ni
-      - run: nci
+      - run: pnpm install --no-frozen-lockfile
       - run: nr lint
       - run: nr typecheck
 
@@ -40,14 +39,13 @@ jobs:
       - uses: actions/checkout@v4
       - uses: pnpm/action-setup@v4
         with:
-          run_install: false
+          version: 10.14.0
       - name: Set node ${{ matrix.node }}
         uses: actions/setup-node@v4
         with:
           node-version: ${{ matrix.node }}
           cache: pnpm
 
-      - run: pnpm i -g @antfu/ni
-      - run: nci
+      - run: pnpm install --no-frozen-lockfile
       - run: nr build
       - run: nr test
