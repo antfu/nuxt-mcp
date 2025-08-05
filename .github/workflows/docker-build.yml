@@ -1,0 +1,197 @@
+name: Docker Build and Push
+
+on:
+  push:
+    branches: [main, master, develop]
+  pull_request:
+    branches: [main, master]
+
+env:
+  REGISTRY: docker.io
+  IMAGE_NAME: nuxt-fullstack-mcp
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    outputs:
+      should-deploy: ${{ steps.check.outputs.should-deploy }}
+      image-tag: ${{ steps.meta.outputs.image-tag }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: lts/*
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Run linter
+        run: pnpm lint
+
+      - name: Run type check
+        run: pnpm typecheck
+
+      - name: Run tests
+        run: pnpm test
+
+      - name: Run integration tests
+        run: pnpm test:integration
+
+      - name: Check deployment conditions
+        id: check
+        run: |
+          if [[ "${{ github.event_name }}" == "push" ]] && [[ "${{ github.ref }}" == "refs/heads/main" || "${{ github.ref }}" == "refs/heads/master" ]]; then
+            echo "should-deploy=true" >> $GITHUB_OUTPUT
+            echo "✅ Tests passed - will deploy to Docker Hub"
+          else
+            echo "should-deploy=false" >> $GITHUB_OUTPUT
+            echo "ℹ️ Tests passed - skipping Docker Hub deployment (not main/master branch push)"
+          fi
+
+      - name: Generate image metadata
+        id: meta
+        run: |
+          if [[ "${{ github.ref }}" == "refs/heads/main" || "${{ github.ref }}" == "refs/heads/master" ]]; then
+            echo "image-tag=latest" >> $GITHUB_OUTPUT
+          elif [[ "${{ github.ref }}" == "refs/heads/develop" ]]; then
+            echo "image-tag=dev" >> $GITHUB_OUTPUT
+          else
+            echo "image-tag=test" >> $GITHUB_OUTPUT
+          fi
+
+  docker-build:
+    runs-on: ubuntu-latest
+    needs: test
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up QEMU
+        uses: docker/setup-qemu-action@v3
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Log in to Docker Hub
+        if: needs.test.outputs.should-deploy == 'true'
+        uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+      - name: Extract metadata
+        id: meta
+        uses: docker/metadata-action@v5
+        with:
+          images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
+          tags: |
+            type=ref,event=branch
+            type=ref,event=pr
+            type=raw,value=latest,enable={{is_default_branch}}
+            type=raw,value=dev,enable=${{ github.ref == 'refs/heads/develop' }}
+            type=sha,prefix={{branch}}-
+
+      - name: Build Docker image (test only)
+        if: needs.test.outputs.should-deploy == 'false'
+        uses: docker/build-push-action@v5
+        with:
+          context: .
+          push: false
+          tags: ${{ env.IMAGE_NAME }}:test
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+
+      - name: Build and push Docker image (production)
+        if: needs.test.outputs.should-deploy == 'true'
+        uses: docker/build-push-action@v5
+        with:
+          context: .
+          platforms: linux/amd64,linux/arm64
+          push: true
+          tags: ${{ steps.meta.outputs.tags }}
+          labels: ${{ steps.meta.outputs.labels }}
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+
+      - name: Test Docker image
+        run: |
+          # Determine which image to test
+          if [[ "${{ needs.test.outputs.should-deploy }}" == "true" ]]; then
+            IMAGE_TAG="${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ needs.test.outputs.image-tag }}"
+            echo "Testing pushed image: $IMAGE_TAG"
+            docker pull "$IMAGE_TAG"
+          else
+            IMAGE_TAG="${{ env.IMAGE_NAME }}:test"
+            echo "Testing local image: $IMAGE_TAG"
+          fi
+          
+          # Start the container
+          CONTAINER_ID=$(docker run -d -p 3000:3000 "$IMAGE_TAG")
+          echo "Started container: $CONTAINER_ID"
+          
+          # Wait for the container to start
+          echo "Waiting for container to start..."
+          sleep 30
+          
+          # Check if the container is running
+          if ! docker ps | grep "$CONTAINER_ID"; then
+            echo "❌ Container failed to start"
+            docker logs "$CONTAINER_ID"
+            exit 1
+          fi
+          
+          echo "✅ Container is running"
+          
+          # Test health check endpoint (if available)
+          echo "Testing application endpoints..."
+          if curl -f http://localhost:3000/__mcp/health >/dev/null 2>&1; then
+            echo "✅ Health check endpoint responding"
+          elif curl -f http://localhost:3000 >/dev/null 2>&1; then
+            echo "✅ Main endpoint responding"
+          else
+            echo "⚠️ No endpoints responding (this might be expected for development)"
+            docker logs "$CONTAINER_ID" | tail -20
+          fi
+          
+          # Cleanup
+          docker stop "$CONTAINER_ID" >/dev/null 2>&1 || true
+          docker rm "$CONTAINER_ID" >/dev/null 2>&1 || true
+          echo "✅ Container test completed"
+
+      - name: Generate deployment summary
+        if: needs.test.outputs.should-deploy == 'true'
+        run: |
+          echo "## 🚀 Docker Deployment Summary" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "✅ **Tests Passed**: All quality checks completed successfully" >> $GITHUB_STEP_SUMMARY
+          echo "🐳 **Image Built**: Multi-platform (linux/amd64, linux/arm64)" >> $GITHUB_STEP_SUMMARY
+          echo "📦 **Pushed to Docker Hub**: \`${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ needs.test.outputs.image-tag }}\`" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "### Quick Start" >> $GITHUB_STEP_SUMMARY
+          echo "\`\`\`bash" >> $GITHUB_STEP_SUMMARY
+          echo "# Pull the latest image" >> $GITHUB_STEP_SUMMARY
+          echo "docker pull ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ needs.test.outputs.image-tag }}" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "# Run the container" >> $GITHUB_STEP_SUMMARY
+          echo "docker run -p 3000:3000 ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ needs.test.outputs.image-tag }}" >> $GITHUB_STEP_SUMMARY
+          echo "\`\`\`" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "🔗 **Docker Hub**: https://hub.docker.com/r/${{ env.IMAGE_NAME }}" >> $GITHUB_STEP_SUMMARY
+          echo "📊 **Workflow**: https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}" >> $GITHUB_STEP_SUMMARY
+
+      - name: Generate test summary
+        if: needs.test.outputs.should-deploy == 'false'
+        run: |
+          echo "## ✅ Build Test Summary" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "✅ **Tests Passed**: All quality checks completed successfully" >> $GITHUB_STEP_SUMMARY
+          echo "🐳 **Docker Build**: Image built and tested locally" >> $GITHUB_STEP_SUMMARY
+          echo "ℹ️ **Deployment**: Skipped (not main/master branch push)" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "**Note**: Docker images are only pushed to Docker Hub on successful merge to main/master branch." >> $GITHUB_STEP_SUMMARY

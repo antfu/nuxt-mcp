@@ -10,9 +10,16 @@
     "lint": "eslint",
     "release": "bumpp -r && pnpm -r publish",
     "test": "vitest",
+    "test:integration": "node packages/nuxt-mcp/test-integration.ts",
     "inspect": "npx @modelcontextprotocol/inspector",
     "typecheck": "tsc --noEmit",
-    "prepare": "simple-git-hooks && nr -r dev:prepare"
+    "prepare": "simple-git-hooks && nr -r dev:prepare",
+    "docker:build": "docker build -t nuxt-fullstack-mcp .",
+    "docker:run": "docker run -p 3000:3000 nuxt-fullstack-mcp",
+    "docker:dev": "docker-compose up -d",
+    "docker:stop": "docker-compose down",
+    "docker:clean": "docker system prune -a",
+    "start": "NODE_ENV=production node packages/nuxt-mcp/playground/.output/server/index.mjs"
   },
   "devDependencies": {
     "@antfu/eslint-config": "catalog:cli",
