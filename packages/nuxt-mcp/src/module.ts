@@ -5,7 +5,7 @@ import type { McpToolContext } from './types'
 import { addVitePlugin, defineNuxtModule } from '@nuxt/kit'
 import { ViteMcp } from 'vite-plugin-mcp'
 import { promptNuxtBasic } from './prompts/basic'
-import { toolsNuxtRuntime } from './tools/runtime'
+import { useToolsRuntime } from './tools/runtime'
 import { toolsScaffold } from './tools/scaffold'
 
 export interface ModuleOptions extends ViteMcpOptions {
@@ -35,6 +35,7 @@ export default defineNuxtModule<ModuleOptions>({
   async setup(options, nuxt) {
     const unimport = promiseWithResolve<Unimport>()
     const nitro = promiseWithResolve<Nitro>()
+    const { registerTools } = useToolsRuntime()
 
     nuxt.hook('imports:context', (_unimport) => {
       unimport.resolve(_unimport)
@@ -69,7 +70,7 @@ export default defineNuxtModule<ModuleOptions>({
         }
 
         promptNuxtBasic(context)
-        toolsNuxtRuntime(context)
+        registerTools(context)
         toolsScaffold(context)
 
         // eslint-disable-next-line ts/ban-ts-comment
