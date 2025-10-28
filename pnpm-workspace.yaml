@@ -5,48 +5,48 @@ packages:
   - examples/*
 catalogs:
   cli:
-    '@antfu/eslint-config': ^5.1.0
-    '@antfu/ni': ^25.0.0
+    '@antfu/eslint-config': ^6.1.0
+    '@antfu/ni': ^27.0.1
     '@modelcontextprotocol/inspector': ^0.11.0
-    bumpp: ^10.2.2
-    eslint: ^9.32.0
-    lint-staged: ^16.1.2
+    bumpp: ^10.3.1
+    eslint: ^9.38.0
+    lint-staged: ^16.2.6
     nodemon: ^3.1.10
     simple-git-hooks: ^2.13.1
-    tsx: ^4.20.3
-    typescript: ~5.8.3
-    unbuild: ^3.6.0
-    vite: ^7.0.6
-    vue-tsc: ^3.0.5
+    tsx: ^4.20.6
+    typescript: ~5.9.3
+    unbuild: ^3.6.1
+    vite: ^7.1.12
+    vue-tsc: ^3.1.2
   nuxt:
-    '@nuxt/devtools': ^2.6.2
-    '@nuxt/eslint-config': ^1.7.1
-    '@nuxt/kit': ^4.0.2
+    '@nuxt/devtools': ^2.7.0
+    '@nuxt/eslint-config': ^1.9.0
+    '@nuxt/kit': ^4.2.0
     '@nuxt/module-builder': ^1.0.2
-    '@nuxt/schema': ^4.0.2
-    '@nuxt/test-utils': ^3.19.2
-    nitropack: ^2.12.4
-    nuxi: ^3.27.0
-    nuxt: ^4.0.2
+    '@nuxt/schema': ^4.2.0
+    '@nuxt/test-utils': ^3.20.1
+    nitropack: ^2.12.8
+    nuxi: ^3.29.3
+    nuxt: ^4.2.0
   prod:
-    '@modelcontextprotocol/sdk': ^1.17.1
-    ansis: ^4.1.0
-    async-cache-dedupe: ^2.2.0
+    '@modelcontextprotocol/sdk': ^1.20.2
+    ansis: ^4.2.0
+    async-cache-dedupe: ^3.3.0
     citty: ^0.1.6
-    debug: ^4.4.1
+    debug: ^4.4.3
     h3: ^1.15.4
     pathe: ^2.0.3
-    unimport: ^5.2.0
+    unimport: ^5.5.0
     zod: ^3.25.76
   testing:
-    vitest: ^3.2.4
+    vitest: ^4.0.4
     vitest-package-exports: ^0.1.1
-    yaml: ^2.8.0
+    yaml: ^2.8.1
   types:
     '@types/debug': ^4.1.12
     '@types/node': latest
   utils:
-    '@antfu/utils': ^9.2.0
+    '@antfu/utils': ^9.3.0
     tinyexec: ^1.0.1
 onlyBuiltDependencies:
   - esbuild
