@@ -8,7 +8,7 @@
     "dev": "pnpm -r run dev",
     "play": "pnpm -C packages/nuxt-mcp play",
     "lint": "eslint",
-    "release": "bumpp -r && pnpm -r publish",
+    "release": "bumpp -r",
     "test": "vitest",
     "inspect": "npx @modelcontextprotocol/inspector",
     "typecheck": "tsc --noEmit",
