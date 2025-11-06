@@ -37,6 +37,9 @@
     "yaml": "catalog:testing",
     "zod": "catalog:prod"
   },
+  "resolutions": {
+    "vite": "catalog:cli"
+  },
   "simple-git-hooks": {
     "pre-commit": "pnpm i --frozen-lockfile --ignore-scripts --offline && npx lint-staged"
   },
