@@ -21,7 +21,7 @@ This nuxt project is configured with following structure:
       lines.push(`
 ## SSR
 
-This is a Nuxt 3 application with SSR enabled. Components should be isomorphic and can be executed on both server or client side.
+This is a Nuxt 3 application with SSR enabled. Components should be isomorphic and can be executed on both the server and client sides.
 
 In scenarios where you need different logic for server and client, use \`import.meta.client\` and \`import.meta.server\` 
 to branch the code, and use dynamic imports if needed.
@@ -39,7 +39,7 @@ This is a Nuxt 3 application with SSR disabled. While components are primarily r
       lines.push(`
 ## Auto-imports
 
-This Nuxt project is configured have auto-imports enabled.
+This Nuxt project is configured to have auto-imports enabled.
 
 For example, Vue apis (ref, computed, watch, etc.) are auto-imported, so you can directly use them in your code without import statements.
 
@@ -50,7 +50,7 @@ You can find the full auto-import items with tool \`list-nuxt-auto-imports-items
       lines.push(`
 ## No auto-imports
 
-This Nuxt project is configured have auto-imports disabled.
+This Nuxt project is configured to have auto-imports disabled.
 
 You can still reference the registered entries with tool \`list-nuxt-auto-imports-items\`.
 But you need to always manually import the usages when modifying the code, either directly import the item from their source, 
@@ -58,7 +58,7 @@ or use explicit \`import { xxx } from '#imports'\` to import any items from the 
 `)
     }
 
-    // Referene prompts from https://github.com/antfu/nuxt-mcp/issues/2 by @DannyVogel
+    // reference prompts from https://github.com/antfu/nuxt-mcp/issues/2 by @DannyVogel
     //     lines.push(`
     // - This is a Nuxt 3 application using the Composition API with <script setup> syntax.
     // - Leverage Nuxt 3's auto-imports system:
