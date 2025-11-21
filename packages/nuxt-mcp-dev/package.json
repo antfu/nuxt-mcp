@@ -1,12 +1,12 @@
 {
-  "name": "nuxt-mcp",
+  "name": "nuxt-mcp-dev",
   "type": "module",
-  "version": "0.2.6",
-  "description": "MCP server helping models to understand your Nuxt app better.",
+  "version": "0.0.0",
+  "description": "MCP server from your Nuxt dev server helping models to understand your Nuxt app better.",
   "license": "MIT",
-  "homepage": "https://github.com/antfu/nuxt-mcp#readme",
-  "repository": "antfu/nuxt-mcp",
-  "bugs": "https://github.com/antfu/nuxt-mcp/issues",
+  "homepage": "https://github.com/antfu/nuxt-mcp-dev#readme",
+  "repository": "antfu/nuxt-mcp-dev",
+  "bugs": "https://github.com/antfu/nuxt-mcp-dev/issues",
   "keywords": [
     "nuxt",
     "mcp",

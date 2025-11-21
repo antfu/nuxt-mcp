@@ -26,7 +26,7 @@ export interface ModuleHooks {
 
 export default defineNuxtModule<ModuleOptions>({
   meta: {
-    name: 'nuxt-mcp',
+    name: 'nuxt-mcp-dev',
     configKey: 'mcp',
   },
   defaults: {

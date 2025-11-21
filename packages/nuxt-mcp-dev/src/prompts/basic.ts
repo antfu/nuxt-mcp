@@ -58,7 +58,7 @@ or use explicit \`import { xxx } from '#imports'\` to import any items from the 
 `)
     }
 
-    // reference prompts from https://github.com/antfu/nuxt-mcp/issues/2 by @DannyVogel
+    // reference prompts from https://github.com/antfu/nuxt-mcp-dev/issues/2 by @DannyVogel
     //     lines.push(`
     // - This is a Nuxt 3 application using the Composition API with <script setup> syntax.
     // - Leverage Nuxt 3's auto-imports system:
